@@ -2,9 +2,7 @@
 
 Um laboratório de **Prompt Engineering** construído com **Flask** e a **API do Google Gemini**, criado como projeto de portfólio para demonstrar integração prática com Large Language Models (LLMs).
 
-O usuário escreve um prompt, escolhe uma categoria de tarefa (resumir, traduzir, explicar código, gerar código, melhorar prompt ou brainstorm) e recebe a resposta gerada pelo Gemini em tempo real, com todo o histórico da sessão visível na tela.
-
-> 💡 Projeto simples de propósito: o foco está em uma integração de IA limpa, bem organizada e fácil de entender — não em complexidade desnecessária.
+> 💡 O usuário escreve um prompt, escolhe uma categoria de tarefa (resumir, traduzir, explicar código, gerar código, melhorar prompt ou brainstorm) e recebe a resposta gerada pelo Gemini em tempo real, com todo o histórico da sessão visível na tela.
 
 ---
 
@@ -27,13 +25,12 @@ O usuário escreve um prompt, escolhe uma categoria de tarefa (resumir, traduzir
 
 ## 🛠️ Tecnologias utilizadas
 
-| Camada        | Tecnologia                                   |
+| Camada        | Tecnologia                                    |
 |---------------|-----------------------------------------------|
 | Backend       | Python 3, Flask                               |
 | IA Generativa | Google Gemini API (`google-genai` SDK)        |
-| Frontend      | HTML5, CSS3, JavaScript (vanilla, sem frameworks) |
+| Frontend      | HTML5, CSS3, JavaScript                       |
 | Configuração  | `python-dotenv`                               |
-| Armazenamento | Em memória (lista Python), sem banco de dados |
 
 ---
 
