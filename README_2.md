@@ -25,10 +25,6 @@ Projeto de portfólio construído para praticar **Python, Flask e integração c
 
 **AI Prompt Studio** é uma aplicação web onde o usuário escreve um prompt, escolhe uma categoria de tarefa (resumir, traduzir, explicar código, gerar código, melhorar prompt ou brainstorm) e recebe uma resposta gerada pela **API do Google Gemini** em tempo real — com histórico da sessão exibido na tela.
 
-Criei este projeto para consolidar, na prática, conceitos que estudei sobre **IA Generativa e Prompt Engineering**, aplicando-os em um produto real, com backend em Python/Flask e integração direta com uma API de LLM em produção.
-
-> 💬 Estou em busca de uma vaga de **estágio em desenvolvimento de software / dados / IA**. Se este projeto despertou seu interesse, ficarei feliz em conversar — meus contatos estão [aqui embaixo](#-sobre-mim).
-
 ---
 
 ## 🖼️ Demonstração
@@ -44,18 +40,18 @@ Criei este projeto para consolidar, na prática, conceitos que estudei sobre **I
 
 </div>
 
-> 📌 *Dica: grave um GIF curto mostrando o fluxo completo (escolher categoria → digitar prompt → ver resposta) e substitua as imagens acima — GIFs aumentam muito o engajamento em READMEs de portfólio.*
+> 📌 *Dica: gravar um GIF
 
 ---
 
 ## ✨ Funcionalidades
 
-- ✅ Envio de prompts para a API do Gemini com resposta em tempo real
-- ✅ 6 categorias de tarefa, cada uma com uma instrução de sistema própria e otimizada
-- ✅ Histórico de conversas da sessão, com cópia rápida da resposta
-- ✅ Interface responsiva, com identidade visual inspirada no Material Design do Google
-- ✅ Tratamento de erros amigável (chave ausente, prompt vazio, falha de API)
-- ✅ Zero dependência de banco de dados — 100% funcional após configurar uma chave de API
+-  Envio de prompts para a API do Gemini com resposta em tempo real
+-  6 categorias de tarefa, cada uma com uma instrução de sistema própria e otimizada
+-  Histórico de conversas da sessão, com cópia rápida da resposta
+-  Interface responsiva, com identidade visual inspirada no Material Design do Google
+-  Tratamento de erros amigável (chave ausente, prompt vazio, falha de API)
+-  Zero dependência de banco de dados — 100% funcional após configurar uma chave de API
 
 ---
 
@@ -136,19 +132,6 @@ Acesse em `http://localhost:5000` 🚀
 - [ ] Deploy público (Render/Railway) para demonstração ao vivo
 - [ ] Persistência opcional de histórico (SQLite)
 - [ ] Streaming de resposta (efeito de digitação)
-
----
-
-## 🤝 Sobre mim
-
-Sou estudante/entusiasta de tecnologia em busca de uma vaga de **estágio**, com interesse em desenvolvimento de software, backend e inteligência artificial aplicada.
-
-<!-- Substitua pelos seus dados reais -->
-- 💼 LinkedIn: [linkedin.com/in/seu-usuario](https://linkedin.com/in/seu-usuario)
-- 💻 GitHub: [github.com/seu-usuario](https://github.com/seu-usuario)
-- 📧 E-mail: seu.email@exemplo.com
-
-Se você é recrutador(a) ou trabalha em uma empresa com vagas de estágio abertas, terei prazer em conversar! 🙂
 
 ---
 
