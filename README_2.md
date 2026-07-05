@@ -4,8 +4,7 @@
 
 ### Um playground de Prompt Engineering integrado à API do Google Gemini
 
-Projeto de portfólio construído para praticar **Python, Flask e integração com LLMs** — desenvolvido enquanto busco minha primeira oportunidade de **estágio em desenvolvimento/IA**.
-
+Projeto de portfólio construído para praticar **Python, Flask e integração com LLMs** 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=flat&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![Gemini API](https://img.shields.io/badge/Google-Gemini_API-4285F4?style=flat&logo=google&logoColor=white)](https://ai.google.dev/)
