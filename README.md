@@ -26,7 +26,7 @@ Um laboratório de **Prompt Engineering** construído com **Flask** e a **API do
   - ✨ **Melhorar prompt**
   - 💡 **Brainstorm**
 - Visualização da resposta gerada, com opção de copiar para a área de transferência.
-- Histórico de conversas da sessão atual (banco de dados).
+- Histórico de conversas da sessão atual
 - Interface responsiva, com identidade visual inspirada nos produtos do Google (Material Design, tipografia Roboto, cards e paleta clara).
 - Tratamento de erros amigável (chave de API ausente, prompt vazio, falhas de comunicação com a API).
 
@@ -34,13 +34,14 @@ Um laboratório de **Prompt Engineering** construído com **Flask** e a **API do
 
 ## Tecnologias utilizadas
 
-| Camada         | Tecnologia                                    |
-|----------------|-----------------------------------------------|
-| Backend        | Python 3, Flask                               |
-| Banco de Dados | SQLite                              |
-| IA Generativa  | Google Gemini API (`google-genai` SDK)        |
-| Frontend       | HTML5, CSS3, JavaScript                       |
-
+| Camada         | Tecnologia                               |
+|----------------|------------------------------------------|
+| Backend        | Python 3                                 |
+| Framework Web  | Flask                                    |
+| Banco de Dados | ---                                 |
+| IA Generativa  | Google Gemini API (`google-genai` SDK)   |
+| Frontend       | HTML5, CSS3, JavaScript                  |
+| Configuração   | python-dotenv                            |
 ---
 
 ## 📁 Estrutura do projeto
