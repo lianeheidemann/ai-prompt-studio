@@ -1,12 +1,21 @@
+<div align="center">
+
 # 🧠 AI Prompt Studio
 
-Um laboratório de **Prompt Engineering** construído com **Flask** e a **API do Google Gemini**, criado como projeto de portfólio para demonstrar integração prática com Large Language Models (LLMs).
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=flat&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![Gemini API](https://img.shields.io/badge/Google-Gemini_API-4285F4?style=flat&logo=google&logoColor=white)](https://ai.google.dev/)
+
+Um laboratório de **Prompt Engineering** construído com **Flask** e a **API do Google Gemini**.
+
 
 > ⚙️ O usuário escreve um prompt, escolhe uma categoria de tarefa (resumir, traduzir, explicar código, gerar código, melhorar prompt ou brainstorm) e recebe a resposta gerada pelo Gemini em tempo real, com todo o histórico da sessão visível na tela.
 
+</div>
+
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 - Envio de prompts em linguagem natural para a API do Gemini.
 - Seis categorias de tarefa, cada uma com uma instrução de sistema própria:
@@ -23,14 +32,13 @@ Um laboratório de **Prompt Engineering** construído com **Flask** e a **API do
 
 ---
 
-## 🛠️ Tecnologias utilizadas
+## Tecnologias utilizadas
 
 | Camada        | Tecnologia                                    |
 |---------------|-----------------------------------------------|
 | Backend       | Python 3, Flask                               |
 | IA Generativa | Google Gemini API (`google-genai` SDK)        |
 | Frontend      | HTML5, CSS3, JavaScript                       |
-| Configuração  | `python-dotenv`                               |
 
 ---
 
@@ -40,28 +48,28 @@ Um laboratório de **Prompt Engineering** construído com **Flask** e a **API do
 ai-prompt-studio/
 │
 ├── app.py                     # Rotas Flask e orquestração da aplicação
-├── config.py                  # Leitura centralizada das variáveis de ambiente
+├── config.py                  
 ├── requirements.txt           # Dependências do projeto
 ├── README.md
-├── .env.example                # Modelo de variáveis de ambiente
+├── .env.example              
 │
 ├── templates/
-│   └── index.html             # Página única da aplicação
+│   └── index.html             
 │
 ├── static/
-│   ├── style.css               # Estilos (visual inspirado no Google)
-│   └── script.js               # Lógica de front-end e chamadas à API
+│   ├── style.css               
+│   └── script.js              
 │
 └── services/
     ├── __init__.py
-    └── gemini_service.py       # Integração isolada com a API do Gemini
+    └── gemini_service.py       # Integração com a API do Gemini
 ```
 
 Essa separação segue o princípio de **responsabilidade única**: `app.py` cuida apenas de rotas HTTP, `gemini_service.py` cuida apenas da IA, e templates/static cuidam apenas da apresentação.
 
 ---
 
-## 🚀 Como instalar e executar
+## ⚙️ Como instalar e executar
 
 ### Pré-requisitos
 
@@ -112,27 +120,10 @@ Assim que a chave estiver configurada, o projeto funciona imediatamente — não
 
 ---
 
-## 📸 Capturas de tela
-
-> Substitua os espaços reservados abaixo pelas imagens reais do projeto em execução.
+## 📸 Ilustração
 
 ![homepage.png](docs/assets/homepage.png)
 
 ---
 
-## 🧭 Próximos passos / melhorias futuras
-
-- [ ] Persistir o histórico em um banco de dados (SQLite/PostgreSQL) para manter conversas entre sessões.
-- [ ] Autenticação de usuários e histórico individual.
-- [ ] Streaming da resposta do Gemini token a token (efeito de "digitação").
-- [ ] Exportar o histórico em PDF ou Markdown.
-- [ ] Suporte a múltiplos idiomas na interface.
-- [ ] Testes automatizados (pytest) para as rotas e para o serviço de IA.
-- [ ] Deploy em produção (Render, Railway ou Google Cloud Run) com CI/CD.
-- [ ] Modo escuro (dark mode).
-
----
-
-## 📄 Licença
-
-Este projeto está disponível sob a licença MIT. Sinta-se livre para usá-lo como base de estudo ou para o seu próprio portfólio.
+#
