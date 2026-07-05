@@ -1,0 +1,17 @@
+# Ambiente e segredos
+.env
+venv/
+env/
+*.venv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Prompt Studio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="material-symbols-outlined topbar__logo">auto_awesome</span>
+      <div>
+        <h1 class="topbar__title">AI Prompt Studio</h1>
+        <p class="topbar__subtitle">Prompt Engineering &amp; IA Generativa com a API do Gemini</p>
+      </div>
+    </div>
+    <div class="topbar__badge">
+      <span class="material-symbols-outlined">bolt</span>
+      Powered by Gemini
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- Coluna principal: composer + resposta -->
+    <section class="composer" aria-label="Criar novo prompt">
+
+      <div class="card">
+        <h2 class="card__title">1. Escolha uma categoria</h2>
+        <div class="chips" id="category-chips" role="radiogroup" aria-label="Categorias de prompt">
+          {% for key, meta in categories.items() %}
+          <button
+            type="button"
+            class="chip{% if key == default_category %} chip--active{% endif %}"
+            data-category="{{ key }}"
+            data-color="var(--cat-{{ key }})"
+            role="radio"
+            aria-checked="{{ 'true' if key == default_category else 'false' }}"
+          >
+            <span class="material-symbols-outlined">{{ meta.icon }}</span>
+            {{ meta.label }}
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card__title">2. Escreva seu prompt</h2>
+        <textarea
+          id="prompt-input"
+          class="prompt-input"
+          placeholder="Digite aqui o texto, código ou ideia que deseja enviar ao Gemini..."
+          rows="6"
+        ></textarea>
+
+        <div class="composer__footer">
+          <span id="char-count" class="char-count">0 caracteres</span>
+          <button type="button" id="submit-btn" class="btn btn--primary">
+            <span class="material-symbols-outlined">send</span>
+            Enviar para o Gemini
+          </button>
+        </div>
+      </div>
+
+      <div id="response-card" class="card response-card hidden" aria-live="polite">
+        <div class="response-card__header">
+          <h2 class="card__title" id="response-title">Resposta</h2>
+          <button type="button" id="copy-btn" class="btn btn--ghost btn--small">
+            <span class="material-symbols-outlined">content_copy</span>
+            Copiar
+          </button>
+        </div>
+        <div id="response-body" class="response-card__body"></div>
+      </div>
+
+      <div id="error-card" class="card error-card hidden" role="alert">
+        <span class="material-symbols-outlined">error</span>
+        <span id="error-message"></span>
+      </div>
+
+    </section>
+
+    <!-- Coluna lateral: histórico -->
+    <aside class="history" aria-label="Histórico de conversas">
+      <div class="history__header">
+        <h2 class="card__title">Histórico da sessão</h2>
+        <button type="button" id="clear-history-btn" class="btn btn--ghost btn--small">
+          <span class="material-symbols-outlined">delete</span>
+          Limpar
+        </button>
+      </div>
+
+      <div id="history-list" class="history__list">
+        <p class="history__empty">Suas interações aparecerão aqui durante esta sessão.</p>
+      </div>
+    </aside>
+
+  </main>
+
+  <footer class="footer">
+    <p>AI Prompt Studio &mdash; projeto de portfólio construído com Flask e Google Gemini API. </p>
+  </footer>
+
+  <template id="history-item-template">
+    <article class="history-item">
+      <div class="history-item__meta">
+        <span class="history-item__tag"></span>
+        <time class="history-item__time"></time>
+      </div>
+      <p class="history-item__prompt"></p>
+      <details class="history-item__details">
+        <summary>Ver resposta</summary>
+        <p class="history-item__answer"></p>
+      </details>
+    </article>
+  </template>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
