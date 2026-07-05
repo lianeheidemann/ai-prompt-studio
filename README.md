@@ -2,7 +2,7 @@
 
 Um laboratório de **Prompt Engineering** construído com **Flask** e a **API do Google Gemini**, criado como projeto de portfólio para demonstrar integração prática com Large Language Models (LLMs).
 
-> 💡 O usuário escreve um prompt, escolhe uma categoria de tarefa (resumir, traduzir, explicar código, gerar código, melhorar prompt ou brainstorm) e recebe a resposta gerada pelo Gemini em tempo real, com todo o histórico da sessão visível na tela.
+> ⚙️ O usuário escreve um prompt, escolhe uma categoria de tarefa (resumir, traduzir, explicar código, gerar código, melhorar prompt ou brainstorm) e recebe a resposta gerada pelo Gemini em tempo real, com todo o histórico da sessão visível na tela.
 
 ---
 
