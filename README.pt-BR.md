@@ -92,6 +92,10 @@ As configurações são definidas por variáveis de ambiente no arquivo `config.
 * Todo o histórico permanece apenas no `localStorage` do navegador
 * As requisições são validadas e sanitizadas antes do processamento
 * A limitação de requisições ajuda a impedir abusos originados de um único endereço IP
+  
+## Interface
+
+![Interface do AI Prompt Studio](assets/interface/interface2.png)
 
 ## Licença
 
