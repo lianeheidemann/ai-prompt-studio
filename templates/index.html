@@ -3,41 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Estúdio de prompts com tarefas especializadas e conversas com IA.">
   <title>AI Prompt Studio</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-
+<body
+  data-max-history-items="{{ max_history_items }}"
+  data-max-context-messages="{{ max_context_messages }}"
+  data-max-context-chars="{{ max_context_chars }}"
+  data-max-prompt-length="{{ max_prompt_length }}"
+>
   <header class="topbar">
-    <div class="topbar__brand">
-      <img
-        class="topbar__logo"
-        src="{{ url_for('assets', filename='icon/logo.png') }}"
-        alt="Logo do AI Prompt Studio"
-      >
+    <div class="topbar__inner">
+      <div class="topbar__brand">
+      <img class="topbar__logo" src="{{ url_for('assets', filename='icon/logo.png') }}" alt="Logo do AI Prompt Studio">
       <div>
         <h1 class="topbar__title">AI Prompt Studio</h1>
-        <p class="topbar__subtitle">Prompt Engineering &amp; IA Generativa com a API do Gemini</p>
+        <p class="topbar__subtitle">Crie, refine e converse com inteligência artificial</p>
       </div>
-    </div>
-    <div class="topbar__badge">
-      <span class="material-symbols-outlined">bolt</span>
-      Powered by Gemini
+      </div>
+      <div class="topbar__badge">
+      <span class="material-symbols-outlined">auto_awesome</span>
+        Gemini
+      </div>
     </div>
   </header>
 
   <main class="layout">
-
-    <!-- Coluna principal: composer + resposta -->
-    <section class="composer" aria-label="Criar novo prompt">
+    <section class="composer" aria-label="Interagir com a inteligência artificial">
+      <div class="card">
+        <h2 class="card__title"><span class="step-badge">1</span><span>Como você quer usar a IA?</span></h2>
+        <div class="mode-selector" role="radiogroup" aria-label="Modo de interação">
+          <button type="button" class="mode-option mode-option--active" data-mode="task" role="radio" aria-checked="true">
+            <span class="material-symbols-outlined">task_alt</span>
+            <span><strong>Tarefa rápida</strong><small>Uma solicitação, uma resposta</small></span>
+          </button>
+          <button type="button" class="mode-option" data-mode="conversation" role="radio" aria-checked="false">
+            <span class="material-symbols-outlined">forum</span>
+            <span><strong>Conversa contínua</strong><small>Continue a partir das respostas</small></span>
+          </button>
+        </div>
+        <div id="conversation-toolbar" class="conversation-toolbar hidden">
+          <p><span class="material-symbols-outlined">info</span> A IA usa as mensagens desta conversa para manter o contexto.</p>
+          <button type="button" id="new-conversation-btn" class="btn btn--ghost btn--small">
+            <span class="material-symbols-outlined">add_comment</span>
+            Iniciar nova
+          </button>
+        </div>
+      </div>
 
       <div class="card">
-        <h2 class="card__title">1. Escolha uma categoria</h2>
+        <h2 class="card__title"><span class="step-badge">2</span><span>O que você quer fazer?</span></h2>
         <div class="chips" id="category-chips" role="radiogroup" aria-label="Categorias de prompt">
           {% for key, meta in categories.items() %}
           <button
@@ -56,19 +76,19 @@
       </div>
 
       <div class="card">
-        <h2 class="card__title">2. Escreva seu prompt</h2>
+        <h2 class="card__title"><span class="step-badge">3</span><span>Como posso ajudar?</span></h2>
         <textarea
           id="prompt-input"
           class="prompt-input"
-          placeholder="Digite aqui o texto, código ou ideia que deseja enviar ao Gemini..."
+          placeholder="Descreva o que você precisa. Quanto mais contexto, melhor será a resposta."
           rows="6"
+          maxlength="{{ max_prompt_length }}"
         ></textarea>
-
         <div class="composer__footer">
-          <span id="char-count" class="char-count">0 caracteres</span>
+          <span class="char-count"><span id="char-count">0</span> / {{ max_prompt_length }} caracteres</span>
           <button type="button" id="submit-btn" class="btn btn--primary">
             <span class="material-symbols-outlined">send</span>
-            Enviar para o Gemini
+            Gerar resposta
           </button>
         </div>
       </div>
@@ -81,47 +101,54 @@
             Copiar
           </button>
         </div>
-        <div id="response-body" class="response-card__body"></div>
+        <div id="response-body" class="response-card__body markdown-body"></div>
       </div>
 
       <div id="error-card" class="card error-card hidden" role="alert">
         <span class="material-symbols-outlined">error</span>
         <span id="error-message"></span>
       </div>
-
     </section>
 
-    <!-- Coluna lateral: histórico -->
-    <aside class="history" aria-label="Histórico de conversas">
+    <aside class="history" aria-label="Suas conversas recentes">
       <div class="history__header">
-        <h2 class="card__title">Histórico da sessão</h2>
-        <button type="button" id="clear-history-btn" class="btn btn--ghost btn--small">
-          <span class="material-symbols-outlined">delete</span>
-          Limpar
-        </button>
+        <div>
+          <h2 class="history__title">Atividade recente</h2>
+          <p class="history__privacy">Retome suas últimas interações</p>
+        </div>
+        <div class="history__actions">
+          <button type="button" id="export-history-btn" class="btn btn--ghost btn--icon" title="Baixar histórico" aria-label="Baixar histórico">
+            <span class="material-symbols-outlined">download</span>
+          </button>
+          <button type="button" id="clear-history-btn" class="btn btn--ghost btn--icon" title="Limpar atividade" aria-label="Limpar atividade">
+            <span class="material-symbols-outlined">delete_sweep</span>
+          </button>
+        </div>
       </div>
-
-      <div id="history-list" class="history__list">
-        <p class="history__empty">Suas interações aparecerão aqui durante esta sessão.</p>
-      </div>
+      <div id="history-list" class="history__list"></div>
     </aside>
-
   </main>
 
   <footer class="footer">
-    <p>AI Prompt Studio &mdash; projeto construído com Flask e Google Gemini API. </p>
+    <p>AI Prompt Studio &mdash; transforme ideias em resultados com IA.</p>
   </footer>
 
   <template id="history-item-template">
     <article class="history-item">
       <div class="history-item__meta">
-        <span class="history-item__tag"></span>
-        <time class="history-item__time"></time>
+        <div class="history-item__labels">
+          <span class="history-item__tag"></span>
+          <span class="history-item__mode"></span>
+        </div>
+        <button type="button" class="history-item__delete" title="Excluir item" aria-label="Excluir item">
+          <span class="material-symbols-outlined">close</span>
+        </button>
       </div>
+      <time class="history-item__time"></time>
       <p class="history-item__prompt"></p>
       <details class="history-item__details">
-        <summary>Ver resposta</summary>
-        <p class="history-item__answer"></p>
+        <summary>Abrir resposta</summary>
+        <div class="history-item__answer markdown-body"></div>
       </details>
     </article>
   </template>

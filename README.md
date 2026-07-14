@@ -1,133 +1,86 @@
-<div align="center">
+# AI Prompt Studio
 
-# 🧠 AI Prompt Studio
-
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=flat&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![Gemini API](https://img.shields.io/badge/Google-Gemini_API-4285F4?style=flat&logo=google&logoColor=white)](https://ai.google.dev/)  
-[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)](https://developer.mozilla.org/docs/Web/HTML)
-[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)](https://developer.mozilla.org/docs/Web/CSS)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/docs/Web/JavaScript)
-
-Um laboratório de **Prompt Engineering** construído com **Flask** e a **API do Google Gemini**.
-
-> ⚙️ O usuário escreve um prompt, escolhe uma categoria de tarefa (resumir, traduzir, explicar código, gerar código, melhorar prompt ou brainstorm) e recebe a resposta gerada pelo Gemini em tempo real, com todo o histórico da sessão visível na tela.
-
-</div>
-
----
+Aplicação web em Flask para executar tarefas especializadas e manter conversas com a API do Google Gemini.
 
 ## Funcionalidades
 
-- Envio de prompts em linguagem natural para a API do Gemini.
-- Seis categorias de tarefa, cada uma com uma instrução de sistema própria:
-  - 📝 **Resumir texto**
-  - 🌐 **Traduzir**
-  - 💻 **Explicar código**
-  - ⚙️ **Gerar código**
-  - ✨ **Melhorar prompt**
-  - 💡 **Brainstorm**
-- Visualização da resposta gerada, com opção de copiar para a área de transferência.
-- Histórico de conversas da sessão atual
-- Interface responsiva, com identidade visual inspirada nos produtos do Google (Material Design, tipografia Roboto, cards e paleta clara).
-- Tratamento de erros amigável (chave de API ausente, prompt vazio, falhas de comunicação com a API).
+- Seis categorias com instrução e temperatura próprias: resumo, tradução, explicação de código, geração de código, melhoria de prompt e brainstorm.
+- Modo **Tarefa única**, sem contexto anterior.
+- Modo **Conversa**, que envia ao Gemini apenas as mensagens recentes da conversa atual.
+- Histórico salvo no `localStorage`, sem login e sem armazenamento de conversas no Flask.
+- Exclusão individual, limpeza completa e exportação do histórico em JSON.
+- Markdown renderizado no servidor com Mistune e sanitizado com Bleach; o navegador aplica uma segunda lista de elementos permitidos.
+- Limites de tamanho para prompt, contexto e corpo HTTP.
+- Rate limiting simples por IP.
+- Mensagens públicas de erro sem exposição da exceção interna da API.
 
----
+## Privacidade e funcionamento do contexto
 
-## Tecnologias utilizadas
+O servidor é stateless: ele não possui rota de histórico e não mantém prompts ou respostas em memória. O histórico permanece no perfil atual do navegador e pode desaparecer se os dados do site forem apagados ou se a janela anônima for fechada.
 
-| Camada         | Tecnologia                               |
-|----------------|------------------------------------------|
-| Backend        | Python 3                                 |
-| Framework Web  | Flask                                    |
-| Banco de Dados | ---                                 |
-| IA Generativa  | Google Gemini API (`google-genai` SDK)   |
-| Frontend       | HTML5, CSS3, JavaScript                  |
-| Configuração   | python-dotenv                            |
----
+No modo Conversa, o navegador envia as interações recentes da conversa atual junto da nova pergunta. Esse contexto é usado somente na chamada atual ao Gemini e descartado pelo Flask ao final da requisição.
 
-## 📁 Estrutura do projeto
+## Tecnologias
 
-```
-ai-prompt-studio/
-│
-├── app.py                     # Rotas Flask e orquestração da aplicação
-├── config.py                  
-├── requirements.txt           # Dependências do projeto
-├── README.md
-├── .env.example              
-│
-├── templates/
-│   └── index.html             
-│
-├── static/
-│   ├── style.css               
-│   └── script.js              
-│
-└── services/
-    ├── __init__.py
-    └── gemini_service.py       # Integração com a API do Gemini
-```
+- Python 3.10+
+- Flask 3
+- Google Gen AI SDK
+- Mistune e Bleach
+- HTML, CSS e JavaScript sem framework
+- `localStorage`
 
-Essa separação segue o princípio de **responsabilidade única**: `app.py` cuida apenas de rotas HTTP, `gemini_service.py` cuida apenas da IA, e templates/static cuidam apenas da apresentação.
-
----
-
-## ⚙️ Como instalar e executar
-
-### Pré-requisitos
-
-- Python 3.10 ou superior
-- Uma chave de API do Google Gemini (veja a seção abaixo)
-
-### Passo a passo
+## Instalação
 
 ```bash
-# 1. Clone o repositório
-git clone https://github.com/seu-usuario/ai-prompt-studio.git
-cd ai-prompt-studio
-
-# 2. Crie e ative um ambiente virtual (recomendado)
 python -m venv venv
-source venv/bin/activate        # Linux/macOS
-venv\Scripts\activate           # Windows
-
-# 3. Instale as dependências
+venv\Scripts\activate
 pip install -r requirements.txt
-
-# 4. Configure as variáveis de ambiente
-cp .env.example .env
-# Edite o arquivo .env e insira sua GEMINI_API_KEY
-
-# 5. Execute a aplicação
+copy .env.example .env
 python app.py
 ```
 
-A aplicação estará disponível em **http://localhost:5000**.
+No Linux ou macOS, use `source venv/bin/activate` e `cp .env.example .env`.
 
----
+Configure pelo menos:
 
-## 🔑 Como configurar a chave da Gemini API
+```env
+GEMINI_API_KEY=sua_chave
+GEMINI_MODEL=gemini-3.5-flash
+```
 
-1. Acesse o [Google AI Studio](https://aistudio.google.com/app/apikey).
-2. Faça login com sua conta Google.
-3. Clique em **"Create API key"** e copie a chave gerada.
-4. Cole a chave no arquivo `.env` na raiz do projeto:
+Acesse `http://localhost:5000`.
 
-   ```
-   GEMINI_API_KEY=sua_chave_copiada_aqui
-   ```
+## Configurações de limite
 
-5. (Opcional) Ajuste `GEMINI_MODEL` no `.env` para usar outro modelo disponível na sua conta. A lista atualizada de modelos pode ser consultada em [ai.google.dev/gemini-api/docs/models](https://ai.google.dev/gemini-api/docs/models).
+| Variável | Padrão | Finalidade |
+|---|---:|---|
+| `MAX_PROMPT_LENGTH` | 10000 | Caracteres por pergunta |
+| `MAX_CONTEXT_MESSAGES` | 12 | Mensagens anteriores enviadas no modo Conversa |
+| `MAX_CONTEXT_CHARS` | 30000 | Caracteres totais do contexto |
+| `MAX_REQUEST_BYTES` | 65536 | Tamanho máximo do corpo HTTP |
+| `RATE_LIMIT_REQUESTS` | 10 | Requisições por IP na janela |
+| `RATE_LIMIT_WINDOW_SECONDS` | 60 | Duração da janela do rate limit |
+| `MAX_HISTORY_ITEMS` | 50 | Itens preservados em cada navegador |
 
-Assim que a chave estiver configurada, o projeto funciona imediatamente — não é necessário nenhum outro serviço externo ou banco de dados.
+O rate limiter incluído é adequado para uma única instância. Em produção com múltiplos processos ou servidores, use um armazenamento compartilhado como Redis e configure corretamente o proxy reverso.
 
----
+## Testes
 
-## 📸 Ilustração
+Os testes não consomem a API do Gemini:
 
-![homepage.png](docs/assets/homepage.png)
+```bash
+python -m unittest discover -s tests -v
+node --check static/script.js
+```
 
----
+## Estrutura
 
-#
+```text
+app.py                     Rotas, validações, rate limit e Markdown
+config.py                  Configuração por variáveis de ambiente
+services/gemini_service.py Integração stateless com o Gemini
+templates/index.html       Interface
+static/script.js           localStorage, contexto e interações
+static/style.css           Estilos responsivos
+tests/test_app.py          Testes do backend e do contrato da IA
+```
