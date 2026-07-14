@@ -9,9 +9,8 @@ sempre que o servidor é reiniciado. Nenhum banco de dados é utilizado.
 """
 
 from datetime import datetime
-from pathlib import Path
 
-from flask import Flask, jsonify, render_template, request, send_from_directory
+from flask import Flask, render_template, request, jsonify
 
 from config import Config
 from services.gemini_service import (
@@ -23,8 +22,6 @@ from services.gemini_service import (
 
 app = Flask(__name__)
 app.config.from_object(Config)
-
-APP_ICON_DIRECTORY = Path(app.root_path) / "assets" / "icon"
 
 # Histórico em memória: lista de dicionários com cada interação realizada.
 conversation_history: list[dict] = []
@@ -53,12 +50,6 @@ def _add_to_history(category: str, prompt: str, answer: str) -> dict:
 def index():
     """Renderiza a página principal com as categorias disponíveis."""
     return render_template("index.html", categories=CATEGORIES, default_category=DEFAULT_CATEGORY)
-
-
-@app.route("/favicon.png")
-def app_icon():
-    """Serve o ícone da aplicação usado na aba e no cabeçalho."""
-    return send_from_directory(APP_ICON_DIRECTORY, "icon.png", mimetype="image/png")
 
 
 @app.route("/api/generate", methods=["POST"])
