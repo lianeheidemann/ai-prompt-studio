@@ -1,86 +1,88 @@
 # AI Prompt Studio
 
-Aplicação web em Flask para executar tarefas especializadas e manter conversas com a API do Google Gemini.
+[English](README.md) · [Português (Brasil)](README.pt-BR.md)
 
-## Funcionalidades
+A focused web workspace for common AI-assisted tasks, powered by Google Gemini. It combines specialized workflows, contextual conversations, translation controls, and browser-local history in a lightweight Flask application.
 
-- Seis categorias com instrução e temperatura próprias: resumo, tradução, explicação de código, geração de código, melhoria de prompt e brainstorm.
-- Modo **Tarefa única**, sem contexto anterior.
-- Modo **Conversa**, que envia ao Gemini apenas as mensagens recentes da conversa atual.
-- Histórico salvo no `localStorage`, sem login e sem armazenamento de conversas no Flask.
-- Exclusão individual, limpeza completa e exportação do histórico em JSON.
-- Markdown renderizado no servidor com Mistune e sanitizado com Bleach; o navegador aplica uma segunda lista de elementos permitidos.
-- Limites de tamanho para prompt, contexto e corpo HTTP.
-- Rate limiting simples por IP.
-- Mensagens públicas de erro sem exposição da exceção interna da API.
+## Highlights
 
-## Privacidade e funcionamento do contexto
+- Six specialized workflows: summarization, translation, code explanation, code generation, prompt improvement, and brainstorming.
+- Translation with a browser-language default for the source and English as the default target; both remain editable.
+- Single-task and contextual conversation modes.
+- Private, browser-local history with individual deletion, full cleanup, and JSON export.
+- Sanitized Markdown rendering, request limits, context validation, and per-IP rate limiting.
+- Stateless backend: prompts and responses are not stored by Flask.
 
-O servidor é stateless: ele não possui rota de histórico e não mantém prompts ou respostas em memória. O histórico permanece no perfil atual do navegador e pode desaparecer se os dados do site forem apagados ou se a janela anônima for fechada.
+## Tech stack
 
-No modo Conversa, o navegador envia as interações recentes da conversa atual junto da nova pergunta. Esse contexto é usado somente na chamada atual ao Gemini e descartado pelo Flask ao final da requisição.
+Python 3.10+, Flask 3, Google Gen AI SDK, Mistune, Bleach, and framework-free HTML, CSS, and JavaScript.
 
-## Tecnologias
+## Getting started
 
-- Python 3.10+
-- Flask 3
-- Google Gen AI SDK
-- Mistune e Bleach
-- HTML, CSS e JavaScript sem framework
-- `localStorage`
+### 1. Create and activate a virtual environment
 
-## Instalação
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+On Linux or macOS:
 
 ```bash
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-copy .env.example .env
+python -m venv .venv
+source .venv/bin/activate
+```
+
+### 2. Install dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 3. Configure Gemini
+
+Create a `.env` file in the project root:
+
+```env
+GEMINI_API_KEY=your_api_key
+GEMINI_MODEL=gemini-3.5-flash
+FLASK_DEBUG=False
+```
+
+### 4. Run the application
+
+```bash
 python app.py
 ```
 
-No Linux ou macOS, use `source venv/bin/activate` e `cp .env.example .env`.
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
-Configure pelo menos:
+## Tests
 
-```env
-GEMINI_API_KEY=sua_chave
-GEMINI_MODEL=gemini-3.5-flash
-```
-
-Acesse `http://localhost:5000`.
-
-## Configurações de limite
-
-| Variável | Padrão | Finalidade |
-|---|---:|---|
-| `MAX_PROMPT_LENGTH` | 10000 | Caracteres por pergunta |
-| `MAX_CONTEXT_MESSAGES` | 12 | Mensagens anteriores enviadas no modo Conversa |
-| `MAX_CONTEXT_CHARS` | 30000 | Caracteres totais do contexto |
-| `MAX_REQUEST_BYTES` | 65536 | Tamanho máximo do corpo HTTP |
-| `RATE_LIMIT_REQUESTS` | 10 | Requisições por IP na janela |
-| `RATE_LIMIT_WINDOW_SECONDS` | 60 | Duração da janela do rate limit |
-| `MAX_HISTORY_ITEMS` | 50 | Itens preservados em cada navegador |
-
-O rate limiter incluído é adequado para uma única instância. Em produção com múltiplos processos ou servidores, use um armazenamento compartilhado como Redis e configure corretamente o proxy reverso.
-
-## Testes
-
-Os testes não consomem a API do Gemini:
+Tests use mocks and do not call the Gemini API.
 
 ```bash
 python -m unittest discover -s tests -v
 node --check static/script.js
 ```
 
-## Estrutura
+## Privacy and limits
+
+Conversation history is stored only in the current browser through `localStorage`. In conversation mode, recent messages are sent with the current request to preserve context and are discarded by the server afterward.
+
+Input, context, request-size, history, and rate-limit settings can be adjusted through environment variables defined in [`config.py`](config.py). The built-in rate limiter is intended for a single application instance.
+
+## Project structure
 
 ```text
-app.py                     Rotas, validações, rate limit e Markdown
-config.py                  Configuração por variáveis de ambiente
-services/gemini_service.py Integração stateless com o Gemini
-templates/index.html       Interface
-static/script.js           localStorage, contexto e interações
-static/style.css           Estilos responsivos
-tests/test_app.py          Testes do backend e do contrato da IA
+app.py                      Flask routes, validation, rate limiting, Markdown
+config.py                   Environment-based configuration
+services/gemini_service.py Gemini integration and specialized instructions
+templates/index.html        Application interface
+static/                     Browser behavior and responsive styles
+tests/                      Backend and AI contract tests
 ```
+
+## Interface
+
+![AI Prompt Studio interface](assets/interface/interface2.png)

@@ -19,6 +19,13 @@ const el = {
   conversationToolbar: document.getElementById("conversation-toolbar"),
   newConversationBtn: document.getElementById("new-conversation-btn"),
   chips: document.getElementById("category-chips"),
+  translationOptions: document.getElementById("translation-options"),
+  sourceLanguage: document.getElementById("source-language"),
+  targetLanguage: document.getElementById("target-language"),
+  customSourceLanguageGroup: document.getElementById("custom-source-language-group"),
+  customSourceLanguage: document.getElementById("custom-source-language"),
+  customTargetLanguageGroup: document.getElementById("custom-target-language-group"),
+  customTargetLanguage: document.getElementById("custom-target-language"),
   promptInput: document.getElementById("prompt-input"),
   charCount: document.getElementById("char-count"),
   submitBtn: document.getElementById("submit-btn"),
@@ -45,6 +52,7 @@ function init() {
   loadLocalState();
   setupModes();
   setupChips();
+  setupTranslationControls();
   setupPromptInput();
   setupSubmit();
   setupCopyButton();
@@ -98,11 +106,62 @@ function setupChips() {
       chip.classList.add("chip--active");
       chip.setAttribute("aria-checked", "true");
       state.selectedCategory = chip.dataset.category;
+      updateTranslationOptions();
     });
     if (chip.classList.contains("chip--active")) {
       state.selectedCategory = chip.dataset.category;
     }
   });
+  updateTranslationOptions();
+}
+
+function setupTranslationControls() {
+  selectUserLanguage();
+  setupLanguageSelect(el.sourceLanguage, el.customSourceLanguageGroup, el.customSourceLanguage);
+  setupLanguageSelect(el.targetLanguage, el.customTargetLanguageGroup, el.customTargetLanguage);
+}
+
+function setupLanguageSelect(select, customGroup, customInput) {
+  select.addEventListener("change", () => {
+    const isCustom = select.value === "other";
+    customGroup.classList.toggle("hidden", !isCustom);
+    if (isCustom) customInput.focus();
+  });
+}
+
+function selectUserLanguage() {
+  const prefix = (navigator.language || "").toLowerCase().split("-")[0];
+  const languages = {
+    pt: "Português",
+    en: "Inglês",
+    es: "Espanhol",
+    fr: "Francês",
+    de: "Alemão",
+    it: "Italiano",
+    ja: "Japonês",
+    zh: "Chinês simplificado",
+  };
+  const userLanguage = languages[prefix];
+  if (userLanguage) el.sourceLanguage.value = userLanguage;
+}
+
+function updateTranslationOptions() {
+  const isTranslation = state.selectedCategory === "traduzir";
+  el.translationOptions.classList.toggle("hidden", !isTranslation);
+}
+
+function selectedTargetLanguage() {
+  if (state.selectedCategory !== "traduzir") return null;
+  return el.targetLanguage.value === "other"
+    ? el.customTargetLanguage.value.trim()
+    : el.targetLanguage.value;
+}
+
+function selectedSourceLanguage() {
+  if (state.selectedCategory !== "traduzir") return null;
+  return el.sourceLanguage.value === "other"
+    ? el.customSourceLanguage.value.trim()
+    : el.sourceLanguage.value;
 }
 
 function normalizeCategory(category) {
@@ -136,6 +195,8 @@ function normalizeEntry(value) {
       : categoryLabel(category),
     mode: value.mode === "conversation" ? "conversation" : "task",
     conversation_id: typeof value.conversation_id === "string" ? value.conversation_id : null,
+    source_language: typeof value.source_language === "string" ? value.source_language : null,
+    target_language: typeof value.target_language === "string" ? value.target_language : null,
     prompt: value.prompt,
     answer: value.answer,
     answer_html: typeof value.answer_html === "string" ? value.answer_html : "",
@@ -238,11 +299,26 @@ async function handleSubmit() {
     return;
   }
 
+  const sourceLanguage = selectedSourceLanguage();
+  const targetLanguage = selectedTargetLanguage();
+  if (state.selectedCategory === "traduzir" && !sourceLanguage) {
+    showError("Escolha o idioma original da tradução.");
+    el.sourceLanguage.focus();
+    return;
+  }
+  if (state.selectedCategory === "traduzir" && !targetLanguage) {
+    showError("Escolha o idioma de destino da tradução.");
+    el.targetLanguage.focus();
+    return;
+  }
+
   setLoading(true);
   try {
     const requestBody = {
       prompt,
       category: state.selectedCategory,
+      source_language: sourceLanguage,
+      target_language: targetLanguage,
       mode: state.mode,
       context: state.mode === "conversation" ? buildConversationContext() : [],
     };
@@ -406,7 +482,9 @@ function buildHistoryNode(entry) {
   const node = el.historyTemplate.content.cloneNode(true);
   const article = node.querySelector(".history-item");
   article.style.setProperty("--item-color", categoryColor(entry.category));
-  node.querySelector(".history-item__tag").textContent = entry.category_label;
+  node.querySelector(".history-item__tag").textContent = entry.target_language
+    ? `${entry.source_language || "Automático"} → ${entry.target_language}`
+    : entry.category_label;
   node.querySelector(".history-item__mode").textContent = entry.mode === "conversation" ? "Conversa" : "Rápida";
   node.querySelector(".history-item__time").textContent = formatTimestamp(entry.timestamp);
   node.querySelector(".history-item__prompt").textContent = entry.prompt;

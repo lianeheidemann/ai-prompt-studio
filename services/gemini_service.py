@@ -27,8 +27,8 @@ CATEGORIES = {
         "temperature": 0.2,
         "instruction": (
             "Você é um assistente especializado em tradução. Identifique o idioma "
-            "de origem e, se o usuário não indicar o destino, traduza para o inglês. "
-            "Preserve o sentido, o tom, a formatação e o contexto original."
+            "de origem e traduza para o idioma de destino informado. Preserve o "
+            "sentido, o tom, a formatação e o contexto original."
         ),
     },
     "explicar_codigo": {
@@ -139,6 +139,8 @@ def generate_response(
     prompt: str,
     category: str,
     context: list[dict[str, str]] | None = None,
+    target_language: str | None = None,
+    source_language: str | None = None,
 ) -> str:
     """Gera uma resposta sem persistir prompt, resposta ou contexto no servidor."""
     metadata = CATEGORIES.get(category)
@@ -146,14 +148,27 @@ def generate_response(
         raise GeminiServiceError("A categoria informada é inválida.", code="invalid_category", status_code=400)
 
     context = context or []
+    system_instruction = metadata["instruction"]
+    if category == "traduzir":
+        if not target_language:
+            raise GeminiServiceError(
+                "Escolha o idioma de destino da tradução.",
+                code="missing_target_language",
+                status_code=400,
+            )
+        system_instruction += (
+            f"\n\nO idioma de origem é {source_language or 'detectado automaticamente'}. "
+            f"O idioma de destino obrigatório é {target_language}. "
+            "Entregue somente a tradução, salvo se o usuário pedir explicações."
+        )
+
     contents: str | list[types.Content]
     if context:
         contents = [_to_content(message) for message in context]
         contents.append(types.Content(role="user", parts=[types.Part.from_text(text=prompt)]))
-        system_instruction = f"{metadata['instruction']}\n\n{CONVERSATION_INSTRUCTION}"
+        system_instruction = f"{system_instruction}\n\n{CONVERSATION_INSTRUCTION}"
     else:
         contents = prompt
-        system_instruction = metadata["instruction"]
 
     try:
         response = _get_client().models.generate_content(

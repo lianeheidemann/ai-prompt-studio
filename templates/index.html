@@ -73,6 +73,56 @@
           </button>
           {% endfor %}
         </div>
+
+        <div id="translation-options" class="translation-options hidden">
+          <div class="translation-options__heading">
+            <span class="material-symbols-outlined">language</span>
+            <div>
+              <strong>Idiomas da tradução</strong>
+              <small>Usamos o seu idioma como origem e inglês como destino.</small>
+            </div>
+          </div>
+          <div class="translation-language-grid">
+            <div class="language-field">
+              <label for="source-language">Idioma original</label>
+              <select id="source-language" class="language-select">
+                <option value="Detectar automaticamente">Automático (idioma do navegador)</option>
+                <option value="Português">Português</option>
+                <option value="Inglês">Inglês</option>
+                <option value="Espanhol">Espanhol</option>
+                <option value="Francês">Francês</option>
+                <option value="Alemão">Alemão</option>
+                <option value="Italiano">Italiano</option>
+                <option value="Japonês">Japonês</option>
+                <option value="Chinês simplificado">Chinês simplificado</option>
+                <option value="other">Outro idioma</option>
+              </select>
+              <div id="custom-source-language-group" class="custom-language-group hidden">
+                <label for="custom-source-language">Informe o idioma original</label>
+                <input id="custom-source-language" class="language-input" type="text" maxlength="40" placeholder="Ex.: Coreano">
+              </div>
+            </div>
+            <span class="translation-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+            <div class="language-field">
+              <label for="target-language">Traduzir para</label>
+              <select id="target-language" class="language-select">
+                <option value="Inglês" selected>Inglês</option>
+                <option value="Português">Português</option>
+                <option value="Espanhol">Espanhol</option>
+                <option value="Francês">Francês</option>
+                <option value="Alemão">Alemão</option>
+                <option value="Italiano">Italiano</option>
+                <option value="Japonês">Japonês</option>
+                <option value="Chinês simplificado">Chinês simplificado</option>
+                <option value="other">Outro idioma</option>
+              </select>
+              <div id="custom-target-language-group" class="custom-language-group hidden">
+                <label for="custom-target-language">Informe o idioma de destino</label>
+                <input id="custom-target-language" class="language-input" type="text" maxlength="40" placeholder="Ex.: Coreano">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="card">

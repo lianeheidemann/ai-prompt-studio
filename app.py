@@ -39,6 +39,28 @@ def _error(message: str, code: str, status: int, **headers):
     return response, status
 
 
+def _validate_language(value, *, field_name: str, default: str | None = None):
+    """Valida nomes curtos de idioma antes de inseri-los na instrução do modelo."""
+    if value is None and default is not None:
+        value = default
+    if not isinstance(value, str) or not value.strip():
+        label = "original" if field_name == "source_language" else "de destino"
+        return None, _error(
+            f"Escolha o idioma {label} da tradução.",
+            f"missing_{field_name}",
+            400,
+        )
+
+    language = " ".join(value.strip().split())
+    is_valid_name = (
+        2 <= len(language) <= 40
+        and all(character.isalpha() or character in {" ", "-"} for character in language)
+    )
+    if not is_valid_name:
+        return None, _error("Escolha um idioma válido.", f"invalid_{field_name}", 400)
+    return language, None
+
+
 def _render_markdown(text: str) -> str:
     """Converte Markdown e remove tags, atributos e protocolos perigosos."""
     rendered = MARKDOWN(text)
@@ -173,8 +195,31 @@ def generate():
         if context_error:
             return context_error
 
+    source_language = None
+    target_language = None
+    if category == "traduzir":
+        source_language, language_error = _validate_language(
+            data.get("source_language"),
+            field_name="source_language",
+            default="Detectar automaticamente",
+        )
+        if language_error:
+            return language_error
+        target_language, language_error = _validate_language(
+            data.get("target_language"),
+            field_name="target_language",
+        )
+        if language_error:
+            return language_error
+
     try:
-        answer = generate_response(prompt=prompt, category=category, context=context)
+        answer = generate_response(
+            prompt=prompt,
+            category=category,
+            context=context,
+            source_language=source_language,
+            target_language=target_language,
+        )
     except GeminiServiceError as exc:
         return _error(exc.public_message, exc.code, exc.status_code)
     except Exception:
@@ -186,6 +231,8 @@ def generate():
         "category": category,
         "category_label": CATEGORIES[category]["label"],
         "mode": mode,
+        "source_language": source_language,
+        "target_language": target_language,
         "prompt": prompt,
         "answer": answer,
         "answer_html": _render_markdown(answer),
