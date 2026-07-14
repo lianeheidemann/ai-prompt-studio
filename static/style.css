@@ -70,8 +70,10 @@ body {
 }
 
 .topbar__logo {
-  font-size: 30px;
-  color: var(--primary);
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .topbar__title {
