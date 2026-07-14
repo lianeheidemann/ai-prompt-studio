@@ -87,6 +87,10 @@ Settings via environment variables in `config.py`:
 - All history persists only in browser `localStorage`
 - Requests are validated and sanitized before processing
 - Rate limiting prevents abuse from single IP addresses
+  
+## Interface
+
+![Interface do AI Prompt Studio](assets/interface/interface2.png)
 
 ## License
 
