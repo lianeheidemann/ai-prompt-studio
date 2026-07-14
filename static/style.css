@@ -70,8 +70,11 @@ body {
 }
 
 .topbar__logo {
-  font-size: 30px;
-  color: var(--primary);
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
 
 .topbar__title {
@@ -430,6 +433,11 @@ body {
   .topbar {
     padding: 16px;
     flex-wrap: wrap;
+  }
+
+  .topbar__logo {
+    width: 42px;
+    height: 42px;
   }
 
   .layout {

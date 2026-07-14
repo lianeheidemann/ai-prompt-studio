@@ -15,7 +15,11 @@
 
   <header class="topbar">
     <div class="topbar__brand">
-      <span class="material-symbols-outlined topbar__logo">auto_awesome</span>
+      <img
+        class="topbar__logo"
+        src="{{ url_for('assets', filename='icon/logo.png') }}"
+        alt="Logo do AI Prompt Studio"
+      >
       <div>
         <h1 class="topbar__title">AI Prompt Studio</h1>
         <p class="topbar__subtitle">Prompt Engineering &amp; IA Generativa com a API do Gemini</p>

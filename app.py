@@ -10,7 +10,7 @@ sempre que o servidor é reiniciado. Nenhum banco de dados é utilizado.
 
 from datetime import datetime
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, jsonify, render_template, request, send_from_directory
 
 from config import Config
 from services.gemini_service import (
@@ -51,6 +51,11 @@ def index():
     """Renderiza a página principal com as categorias disponíveis."""
     return render_template("index.html", categories=CATEGORIES, default_category=DEFAULT_CATEGORY)
 
+
+@app.route("/assets/<path:filename>")
+def assets(filename: str):
+    """Disponibiliza os recursos visuais mantidos na pasta assets."""
+    return send_from_directory("assets", filename)
 
 @app.route("/api/generate", methods=["POST"])
 def generate():
