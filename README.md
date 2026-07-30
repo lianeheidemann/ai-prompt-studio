@@ -9,6 +9,8 @@
 
 A lightweight web workspace for AI-assisted tasks with Google Gemini. Features six specialized workflows, contextual conversations, and browser-local history.
 
+> **Note:** the UI and all messages are currently Portuguese (pt-BR) only, with no language toggle.
+
 ## Features
 
 - **6 specialized workflows**: Summarize, translate, explain code, generate code, improve prompts, and brainstorm
@@ -27,6 +29,8 @@ A lightweight web workspace for AI-assisted tasks with Google Gemini. Features s
 
 1. **Clone and configure**
    ```bash
+   git clone https://github.com/lianeheidemann/ai-prompt-studio.git
+   cd ai-prompt-studio
    python -m venv .venv
    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    pip install -r requirements.txt
@@ -37,7 +41,6 @@ A lightweight web workspace for AI-assisted tasks with Google Gemini. Features s
    # Create .env file in project root
    GEMINI_API_KEY=your_api_key
    GEMINI_MODEL=gemini-3.5-flash
-   FLASK_DEBUG=False
    ```
 
 3. **Run**
@@ -77,6 +80,8 @@ Settings via environment variables in `config.py`:
 |----------|---------|---------|
 | `MAX_PROMPT_LENGTH` | 10000 | Max input characters |
 | `MAX_CONTEXT_MESSAGES` | 12 | Conversation history size |
+| `MAX_CONTEXT_CHARS` | 30000 | Max characters of conversation context sent to the model |
+| `MAX_REQUEST_BYTES` | 65536 | Max request body size accepted by Flask |
 | `MAX_HISTORY_ITEMS` | 50 | Browser history limit |
 | `RATE_LIMIT_REQUESTS` | 10 | Requests per window |
 | `RATE_LIMIT_WINDOW_SECONDS` | 60 | Rate limit window |

@@ -13,8 +13,7 @@ class Config:
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
 
-    SECRET_KEY: str = os.getenv("FLASK_SECRET_KEY", "dev-secret-key")
-    DEBUG: bool = os.getenv("FLASK_DEBUG", "True").lower() == "true"
+    DEBUG: bool = os.getenv("FLASK_DEBUG", "False").lower() == "true"
 
     # Limites de entrada e de contexto enviados ao modelo.
     MAX_PROMPT_LENGTH: int = int(os.getenv("MAX_PROMPT_LENGTH", "10000"))
