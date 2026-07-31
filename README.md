@@ -93,16 +93,6 @@ Settings via environment variables in `config.py`:
 - Requests are validated and sanitized before processing
 - Rate limiting prevents abuse from single IP addresses
   
-## Technical Insights
-
-- **Different AI tasks benefit from different generation settings:** deterministic workflows such as translation use a lower temperature, while brainstorming uses a higher value to encourage variation.
-- **A stateless backend reduces server-side data retention:** conversation history stays in the browser instead of being stored by Flask. Prompts are still sent to the configured Gemini API for processing, so local history does not mean fully local inference.
-- **Context limits are both a reliability and cost-control boundary:** validating message order, message count, and total characters prevents malformed or unexpectedly large conversations from reaching the model.
-- **Model output must be treated as untrusted content:** Markdown is rendered and sanitized before being returned as HTML, while request validation and per-IP rate limiting protect the HTTP boundary.
-- **Mocked integration tests validate behavior without consuming API quota:** the test suite checks categories, context roles, sanitization, validation, and rate limiting without making external Gemini requests.
-
----
-
 ## Interface
 
 ![Interface do AI Prompt Studio](assets/interface/interface2.png)
