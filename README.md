@@ -97,6 +97,6 @@ Settings via environment variables in `config.py`:
 
 ![Interface do AI Prompt Studio](assets/interface/interface2.png)
 
-## License
+---
 
-MIT
+<p align='center'>Developed by <strong>Liane Heidemann</strong><p>
