@@ -131,7 +131,7 @@ class GeminiServiceTestCase(unittest.TestCase):
         with patch.object(gemini_service, "_get_client", return_value=fake_client):
             gemini_service.generate_response(
                 "Continue",
-                "brainstorm",
+                "ideias",
                 [
                     {"role": "user", "text": "Gere ideias"},
                     {"role": "model", "text": "Ideia A"},

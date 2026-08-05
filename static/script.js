@@ -12,6 +12,7 @@ const state = {
   history: [],
   currentConversationId: null,
   latestAnswer: "",
+  isLoading: false,
 };
 
 const el = {
@@ -19,13 +20,21 @@ const el = {
   conversationToolbar: document.getElementById("conversation-toolbar"),
   newConversationBtn: document.getElementById("new-conversation-btn"),
   chips: document.getElementById("category-chips"),
-  translationOptions: document.getElementById("translation-options"),
+  taskFields: Array.from(document.querySelectorAll(".task-fields")),
   sourceLanguage: document.getElementById("source-language"),
   targetLanguage: document.getElementById("target-language"),
   customSourceLanguageGroup: document.getElementById("custom-source-language-group"),
   customSourceLanguage: document.getElementById("custom-source-language"),
   customTargetLanguageGroup: document.getElementById("custom-target-language-group"),
   customTargetLanguage: document.getElementById("custom-target-language"),
+  summaryLevelSelect: document.getElementById("summary-level-select"),
+  analysisFocusSelect: document.getElementById("analysis-focus-select"),
+  codeLanguageSelect: document.getElementById("code-language-select"),
+  codeLanguageCustomGroup: document.getElementById("code-language-custom-group"),
+  codeLanguageCustom: document.getElementById("code-language-custom"),
+  improveStyleSelect: document.getElementById("improve-style-select"),
+  improveStyleCustomGroup: document.getElementById("improve-style-custom-group"),
+  improveStyleCustom: document.getElementById("improve-style-custom"),
   promptInput: document.getElementById("prompt-input"),
   charCount: document.getElementById("char-count"),
   submitBtn: document.getElementById("submit-btn"),
@@ -35,10 +44,12 @@ const el = {
   copyBtn: document.getElementById("copy-btn"),
   errorCard: document.getElementById("error-card"),
   errorMessage: document.getElementById("error-message"),
+  historyPanel: document.getElementById("history-panel"),
   historyList: document.getElementById("history-list"),
   clearHistoryBtn: document.getElementById("clear-history-btn"),
   exportHistoryBtn: document.getElementById("export-history-btn"),
   historyTemplate: document.getElementById("history-item-template"),
+  toggleHistoryBtn: document.getElementById("toggle-history-btn"),
 };
 
 function createId() {
@@ -52,11 +63,12 @@ function init() {
   loadLocalState();
   setupModes();
   setupChips();
-  setupTranslationControls();
+  setupTaskFieldControls();
   setupPromptInput();
   setupSubmit();
   setupCopyButton();
   setupHistoryActions();
+  setupHistoryToggle();
   renderHistory();
 }
 
@@ -78,9 +90,7 @@ function setMode(mode) {
     option.setAttribute("aria-checked", String(active));
   });
   el.conversationToolbar.classList.toggle("hidden", state.mode !== "conversation");
-  el.submitBtn.lastChild.textContent = state.mode === "conversation"
-    ? " Enviar mensagem"
-    : " Gerar resposta";
+  updateSubmitLabel();
 }
 
 function startNewConversation() {
@@ -99,6 +109,8 @@ function setupChips() {
   chips.forEach((chip) => {
     chip.style.setProperty("--chip-color", chip.dataset.color);
     chip.addEventListener("click", () => {
+      if (chip.dataset.category === state.selectedCategory) return;
+      resetCategoryFields(state.selectedCategory);
       chips.forEach((item) => {
         item.classList.remove("chip--active");
         item.setAttribute("aria-checked", "false");
@@ -106,22 +118,70 @@ function setupChips() {
       chip.classList.add("chip--active");
       chip.setAttribute("aria-checked", "true");
       state.selectedCategory = chip.dataset.category;
-      updateTranslationOptions();
+      // Um resultado ou erro anterior pertence à tarefa que o gerou, não à nova seleção.
+      el.responseCard.classList.add("hidden");
+      hideError();
+      applyCategoryPresentation(chip);
     });
     if (chip.classList.contains("chip--active")) {
       state.selectedCategory = chip.dataset.category;
     }
   });
-  updateTranslationOptions();
+  const activeChip = chips.find((chip) => chip.dataset.category === state.selectedCategory);
+  if (activeChip) applyCategoryPresentation(activeChip);
 }
 
-function setupTranslationControls() {
+function applyCategoryPresentation(chip) {
+  updateTaskFields(chip.dataset.category);
+  if (chip.dataset.placeholder) el.promptInput.placeholder = chip.dataset.placeholder;
+  updateSubmitLabel();
+  updateSubmitAvailability();
+}
+
+function updateTaskFields(category) {
+  el.taskFields.forEach((section) => {
+    section.classList.toggle("hidden", section.dataset.taskFields !== category);
+  });
+}
+
+function resetCategoryFields(category) {
+  if (category === "gerar_codigo") {
+    el.codeLanguageSelect.value = "";
+    el.codeLanguageCustomGroup.classList.add("hidden");
+    el.codeLanguageCustom.value = "";
+  } else if (category === "melhorar_texto") {
+    el.improveStyleSelect.value = "";
+    el.improveStyleCustomGroup.classList.add("hidden");
+    el.improveStyleCustom.value = "";
+  } else if (category === "resumir") {
+    el.summaryLevelSelect.value = "";
+  } else if (category === "analisar") {
+    el.analysisFocusSelect.value = "";
+  }
+}
+
+function updateSubmitLabel() {
+  const activeChip = el.chips.querySelector(".chip--active");
+  const taskLabel = (activeChip && activeChip.dataset.buttonLabel) || "Gerar resposta";
+  state.submitLabel = state.mode === "conversation" ? "Enviar mensagem" : taskLabel;
+  if (!state.isLoading) {
+    el.submitBtn.lastChild.textContent = ` ${state.submitLabel}`;
+  }
+}
+
+function setupTaskFieldControls() {
   selectUserLanguage();
-  setupLanguageSelect(el.sourceLanguage, el.customSourceLanguageGroup, el.customSourceLanguage);
-  setupLanguageSelect(el.targetLanguage, el.customTargetLanguageGroup, el.customTargetLanguage);
+  setupOptionalCustomSelect(el.sourceLanguage, el.customSourceLanguageGroup, el.customSourceLanguage);
+  setupOptionalCustomSelect(el.targetLanguage, el.customTargetLanguageGroup, el.customTargetLanguage);
+  setupOptionalCustomSelect(el.codeLanguageSelect, el.codeLanguageCustomGroup, el.codeLanguageCustom);
+  setupOptionalCustomSelect(el.improveStyleSelect, el.improveStyleCustomGroup, el.improveStyleCustom);
+  [el.sourceLanguage, el.targetLanguage, el.customSourceLanguage, el.customTargetLanguage].forEach((field) => {
+    field.addEventListener("input", updateSubmitAvailability);
+    field.addEventListener("change", updateSubmitAvailability);
+  });
 }
 
-function setupLanguageSelect(select, customGroup, customInput) {
+function setupOptionalCustomSelect(select, customGroup, customInput) {
   select.addEventListener("change", () => {
     const isCustom = select.value === "other";
     customGroup.classList.toggle("hidden", !isCustom);
@@ -145,9 +205,9 @@ function selectUserLanguage() {
   if (userLanguage) el.sourceLanguage.value = userLanguage;
 }
 
-function updateTranslationOptions() {
-  const isTranslation = state.selectedCategory === "traduzir";
-  el.translationOptions.classList.toggle("hidden", !isTranslation);
+function resolvedOptionalValue(select, customInput) {
+  if (!select) return "";
+  return select.value === "other" ? customInput.value.trim() : select.value;
 }
 
 function selectedTargetLanguage() {
@@ -247,7 +307,35 @@ function addHistoryEntry(entry) {
 /* Envio */
 
 function setupPromptInput() {
-  el.promptInput.addEventListener("input", updateCharacterCount);
+  el.promptInput.addEventListener("input", () => {
+    updateCharacterCount();
+    updateSubmitAvailability();
+  });
+}
+
+function updateSubmitAvailability() {
+  const hasPrompt = el.promptInput.value.trim().length > 0;
+  const validTranslation = state.selectedCategory !== "traduzir"
+    || (Boolean(selectedSourceLanguage()) && Boolean(selectedTargetLanguage()));
+  el.submitBtn.disabled = state.isLoading || !hasPrompt || !validTranslation;
+}
+
+function buildTaskFieldsPrefix(category) {
+  if (category === "gerar_codigo") {
+    const value = resolvedOptionalValue(el.codeLanguageSelect, el.codeLanguageCustom);
+    return value ? `Linguagem ou tecnologia desejada: ${value}\n\n` : "";
+  }
+  if (category === "melhorar_texto") {
+    const value = resolvedOptionalValue(el.improveStyleSelect, el.improveStyleCustom);
+    return value ? `Estilo ou objetivo da melhoria: ${value}\n\n` : "";
+  }
+  if (category === "resumir" && el.summaryLevelSelect.value) {
+    return `Formato do resumo desejado: ${el.summaryLevelSelect.value}\n\n`;
+  }
+  if (category === "analisar" && el.analysisFocusSelect.value) {
+    return `Foco da análise esperado: ${el.analysisFocusSelect.value}\n\n`;
+  }
+  return "";
 }
 
 function updateCharacterCount() {
@@ -286,7 +374,7 @@ function buildConversationContext() {
 }
 
 async function handleSubmit() {
-  if (el.submitBtn.disabled) return;
+  if (state.isLoading) return;
   const prompt = el.promptInput.value.trim();
   hideError();
 
@@ -312,11 +400,14 @@ async function handleSubmit() {
     return;
   }
 
+  const category = state.selectedCategory;
+  const augmentedPrompt = buildTaskFieldsPrefix(category) + prompt;
+
   setLoading(true);
   try {
     const requestBody = {
-      prompt,
-      category: state.selectedCategory,
+      prompt: augmentedPrompt,
+      category,
       source_language: sourceLanguage,
       target_language: targetLanguage,
       mode: state.mode,
@@ -334,10 +425,17 @@ async function handleSubmit() {
 
     const entry = normalizeEntry({
       ...data,
+      // O histórico mostra o texto original do usuário, não o prefixo enviado ao modelo.
+      prompt,
       mode: state.mode,
       conversation_id: state.mode === "conversation" ? state.currentConversationId : null,
     });
     if (!entry) throw new Error("A resposta recebida está incompleta.");
+    if (entry.category !== state.selectedCategory) {
+      // O usuário trocou de tarefa enquanto a resposta ainda carregava: só o histórico recebe o resultado.
+      addHistoryEntry(entry);
+      return;
+    }
 
     state.latestAnswer = entry.answer;
     showResponse(entry);
@@ -360,11 +458,14 @@ function errorMessageForStatus(status) {
 }
 
 function setLoading(isLoading) {
-  el.submitBtn.disabled = isLoading;
+  state.isLoading = isLoading;
   el.newConversationBtn.disabled = isLoading;
+  el.chips.querySelectorAll(".chip").forEach((chip) => { chip.disabled = isLoading; });
+  el.modeOptions.forEach((option) => { option.disabled = isLoading; });
   el.submitBtn.innerHTML = isLoading
     ? '<span class="material-symbols-outlined spin">progress_activity</span> Gerando resposta...'
-    : `<span class="material-symbols-outlined">send</span> ${state.mode === "conversation" ? "Enviar mensagem" : "Gerar resposta"}`;
+    : `<span class="material-symbols-outlined">send</span> ${state.submitLabel || "Gerar resposta"}`;
+  updateSubmitAvailability();
 }
 
 /* Markdown: o servidor usa Bleach e o navegador aplica uma segunda allowlist. */
@@ -509,6 +610,22 @@ function setupHistoryActions() {
   });
 
   el.exportHistoryBtn.addEventListener("click", exportHistory);
+}
+
+function setupHistoryToggle() {
+  setHistoryCollapsed(window.innerWidth <= 900);
+  el.toggleHistoryBtn.addEventListener("click", () => {
+    setHistoryCollapsed(!el.historyPanel.classList.contains("history--collapsed"));
+  });
+}
+
+function setHistoryCollapsed(collapsed) {
+  el.historyPanel.classList.toggle("history--collapsed", collapsed);
+  el.toggleHistoryBtn.setAttribute("aria-expanded", String(!collapsed));
+  el.toggleHistoryBtn.setAttribute(
+    "aria-label",
+    collapsed ? "Mostrar histórico de atividade recente" : "Ocultar histórico de atividade recente"
+  );
 }
 
 function exportHistory() {

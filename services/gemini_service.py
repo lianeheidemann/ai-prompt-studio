@@ -15,56 +15,71 @@ CATEGORIES = {
         "label": "Resumir texto",
         "icon": "summarize",
         "temperature": 0.3,
+        "placeholder": "Cole ou digite o texto que você quer resumir.",
+        "button_label": "Resumir",
         "instruction": (
-            "Você é um assistente especializado em resumir textos. Produza um "
-            "resumo claro, objetivo e bem estruturado, preservando as informações "
-            "essenciais e removendo detalhes redundantes."
+            "Você é um assistente especializado em resumir textos. Reduza o texto "
+            "original para no máximo 50% do seu tamanho, usando poucas frases ou "
+            "tópicos curtos. Mantenha apenas as ideias centrais e descarte exemplos, "
+            "repetições e detalhes secundários — não reescreva o texto quase por "
+            "inteiro apenas reorganizando em tópicos."
         ),
     },
     "traduzir": {
         "label": "Traduzir",
         "icon": "translate",
         "temperature": 0.2,
+        "placeholder": "Digite o texto que você quer traduzir.",
+        "button_label": "Traduzir",
         "instruction": (
             "Você é um assistente especializado em tradução. Identifique o idioma "
             "de origem e traduza para o idioma de destino informado. Preserve o "
             "sentido, o tom, a formatação e o contexto original."
         ),
     },
-    "explicar_codigo": {
-        "label": "Explicar código",
-        "icon": "code",
+    "analisar": {
+        "label": "Analisar",
+        "icon": "insights",
         "temperature": 0.4,
+        "placeholder": "Cole o conteúdo que você quer analisar (texto, dados, código ou cenário).",
+        "button_label": "Analisar",
         "instruction": (
-            "Você é um engenheiro de software sênior especializado em explicar "
-            "código de forma didática. Descreva o funcionamento e destaque riscos, "
-            "pontos de atenção e melhorias com linguagem clara."
+            "Você é um analista sênior especializado em avaliar conteúdos diversos "
+            "(textos, dados, código ou cenários). Identifique os pontos principais, "
+            "forças, riscos e sugestões práticas, com linguagem clara e objetiva."
         ),
     },
     "gerar_codigo": {
         "label": "Gerar código",
         "icon": "terminal",
         "temperature": 0.4,
+        "placeholder": "Descreva a funcionalidade ou o código que você precisa.",
+        "button_label": "Gerar código",
         "instruction": (
             "Você é um engenheiro de software sênior. Gere código limpo, funcional "
             "e seguro, seguindo boas práticas. Declare suposições importantes e "
             "explique brevemente a solução."
         ),
     },
-    "melhorar_prompt": {
-        "label": "Melhorar prompt",
+    "melhorar_texto": {
+        "label": "Melhorar texto",
         "icon": "auto_awesome",
         "temperature": 0.6,
+        "placeholder": "Cole o texto que você quer melhorar.",
+        "button_label": "Melhorar texto",
         "instruction": (
-            "Você é especialista em Prompt Engineering. Reescreva o prompt para "
-            "torná-lo claro, específico e eficaz. Apresente o prompt melhorado e "
-            "explique brevemente as principais mudanças."
+            "Você é um editor e redator especializado em aprimorar textos. Melhore "
+            "a clareza, a fluidez, a gramática e o impacto do texto enviado, "
+            "preservando o sentido original e o idioma. Apresente o texto melhorado "
+            "e explique brevemente as principais mudanças."
         ),
     },
-    "brainstorm": {
-        "label": "Brainstorm",
+    "ideias": {
+        "label": "Ideias",
         "icon": "lightbulb",
         "temperature": 0.9,
+        "placeholder": "Descreva o tema, objetivo ou problema para o qual você quer sugestões.",
+        "button_label": "Gerar ideias",
         "instruction": (
             "Você é um facilitador criativo. Gere ideias variadas e originais, "
             "organizadas em tópicos e agrupadas por abordagem quando fizer sentido."
