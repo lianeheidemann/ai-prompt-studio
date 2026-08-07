@@ -98,7 +98,7 @@ As configurações são definidas por variáveis de ambiente no arquivo `config.
   
 ## Interface
 
-![Interface do AI Prompt Studio](assets\interface\demonstracao.gif)
+![Interface do AI Prompt Studio](assets/interface/demonstracao.gif)
 
 ## Licença
 
