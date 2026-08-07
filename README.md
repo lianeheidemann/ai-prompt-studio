@@ -1,4 +1,4 @@
-<img width="110" src="assets/icon/logo.png" alt="CírioApp icon" />
+<img width="110" src="assets/icon/logo.png" alt="" />
 
 # AI Prompt Studio
 
