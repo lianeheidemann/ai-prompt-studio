@@ -22,12 +22,14 @@ A lightweight web workspace for AI-assisted tasks with Google Gemini. Features s
 ## Quick Start
 
 ### Prerequisites
+
 - Python 3.10+
 - Google Gemini API key
 
 ### Setup
 
 1. **Clone and configure**
+
    ```bash
    git clone https://github.com/lianeheidemann/ai-prompt-studio.git
    cd ai-prompt-studio
@@ -37,6 +39,7 @@ A lightweight web workspace for AI-assisted tasks with Google Gemini. Features s
    ```
 
 2. **Add environment variables**
+
    ```bash
    # Create .env file in project root
    GEMINI_API_KEY=your_api_key
@@ -44,9 +47,11 @@ A lightweight web workspace for AI-assisted tasks with Google Gemini. Features s
    ```
 
 3. **Run**
+
    ```bash
    python app.py
    ```
+
    Open http://127.0.0.1:5000
 
 ## Testing
@@ -92,11 +97,11 @@ Settings via environment variables in `config.py`:
 - All history persists only in browser `localStorage`
 - Requests are validated and sanitized before processing
 - Rate limiting prevents abuse from single IP addresses
-  
+
 ## Interface
 
 ![Interface do AI Prompt Studio](assets\interface\demonstracao.gif)
 
 ---
 
-<p align='center'>Developed by <strong>Liane Heidemann</strong><p>
+<p align="center">Developed by <strong>Liane Heidemann</strong></p>
