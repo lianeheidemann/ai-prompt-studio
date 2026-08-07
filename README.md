@@ -100,7 +100,7 @@ Settings via environment variables in `config.py`:
 
 ## Interface
 
-![AI Prompt Studio interface](assets/interface/interface2.png)
+![Interface do AI Prompt Studio](assets\interface\demonstracao.gif)
 
 ---
 

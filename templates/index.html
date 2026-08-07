@@ -65,6 +65,8 @@
             class="chip{% if key == default_category %} chip--active{% endif %}"
             data-category="{{ key }}"
             data-color="var(--cat-{{ key }})"
+            data-placeholder="{{ meta.placeholder }}"
+            data-button-label="{{ meta.button_label }}"
             role="radio"
             aria-checked="{{ 'true' if key == default_category else 'false' }}"
           >
@@ -73,60 +75,147 @@
           </button>
           {% endfor %}
         </div>
-
-        <div id="translation-options" class="translation-options hidden">
-          <div class="translation-options__heading">
-            <span class="material-symbols-outlined">language</span>
-            <div>
-              <strong>Idiomas da tradução</strong>
-              <small>Usamos o seu idioma como origem e inglês como destino.</small>
-            </div>
-          </div>
-          <div class="translation-language-grid">
-            <div class="language-field">
-              <label for="source-language">Idioma original</label>
-              <select id="source-language" class="language-select">
-                <option value="Detectar automaticamente">Automático (idioma do navegador)</option>
-                <option value="Português">Português</option>
-                <option value="Inglês">Inglês</option>
-                <option value="Espanhol">Espanhol</option>
-                <option value="Francês">Francês</option>
-                <option value="Alemão">Alemão</option>
-                <option value="Italiano">Italiano</option>
-                <option value="Japonês">Japonês</option>
-                <option value="Chinês simplificado">Chinês simplificado</option>
-                <option value="other">Outro idioma</option>
-              </select>
-              <div id="custom-source-language-group" class="custom-language-group hidden">
-                <label for="custom-source-language">Informe o idioma original</label>
-                <input id="custom-source-language" class="language-input" type="text" maxlength="40" placeholder="Ex.: Coreano">
-              </div>
-            </div>
-            <span class="translation-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-            <div class="language-field">
-              <label for="target-language">Traduzir para</label>
-              <select id="target-language" class="language-select">
-                <option value="Inglês" selected>Inglês</option>
-                <option value="Português">Português</option>
-                <option value="Espanhol">Espanhol</option>
-                <option value="Francês">Francês</option>
-                <option value="Alemão">Alemão</option>
-                <option value="Italiano">Italiano</option>
-                <option value="Japonês">Japonês</option>
-                <option value="Chinês simplificado">Chinês simplificado</option>
-                <option value="other">Outro idioma</option>
-              </select>
-              <div id="custom-target-language-group" class="custom-language-group hidden">
-                <label for="custom-target-language">Informe o idioma de destino</label>
-                <input id="custom-target-language" class="language-input" type="text" maxlength="40" placeholder="Ex.: Coreano">
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="card">
         <h2 class="card__title"><span class="step-badge">3</span><span>Como posso ajudar?</span></h2>
+
+        <div id="task-fields-container">
+          <div id="resumir-fields" class="task-fields hidden" data-task-fields="resumir">
+            <div class="field-group">
+              <label for="summary-level-select" class="field-group__label">
+                <span class="material-symbols-outlined">format_list_bulleted</span>
+                Formato do resumo <span class="field-group__optional">(opcional)</span>
+              </label>
+              <select id="summary-level-select" class="field-select">
+                <option value="">Padrão</option>
+                <option value="Resumo bem curto, em poucas frases">Curto (poucas frases)</option>
+                <option value="Resumo em tópicos (bullet points)">Tópicos (bullet points)</option>
+                <option value="Resumo mais detalhado, com contexto">Detalhado</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="traduzir-fields" class="task-fields hidden" data-task-fields="traduzir">
+            <div class="translation-options">
+              <div class="translation-options__heading">
+                <span class="material-symbols-outlined">language</span>
+                <div>
+                  <strong>Idiomas da tradução</strong>
+                  <small>Usamos o seu idioma como origem e inglês como destino.</small>
+                </div>
+              </div>
+              <div class="translation-language-grid">
+                <div class="language-field">
+                  <label for="source-language">Idioma original</label>
+                  <select id="source-language" class="language-select">
+                    <option value="Detectar automaticamente">Automático (idioma do navegador)</option>
+                    <option value="Português">Português</option>
+                    <option value="Inglês">Inglês</option>
+                    <option value="Espanhol">Espanhol</option>
+                    <option value="Francês">Francês</option>
+                    <option value="Alemão">Alemão</option>
+                    <option value="Italiano">Italiano</option>
+                    <option value="Japonês">Japonês</option>
+                    <option value="Chinês simplificado">Chinês simplificado</option>
+                    <option value="other">Outro idioma</option>
+                  </select>
+                  <div id="custom-source-language-group" class="custom-language-group hidden">
+                    <label for="custom-source-language">Informe o idioma original</label>
+                    <input id="custom-source-language" class="language-input" type="text" maxlength="40" placeholder="Ex.: Coreano">
+                  </div>
+                </div>
+                <span class="translation-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+                <div class="language-field">
+                  <label for="target-language">Traduzir para</label>
+                  <select id="target-language" class="language-select">
+                    <option value="Inglês" selected>Inglês</option>
+                    <option value="Português">Português</option>
+                    <option value="Espanhol">Espanhol</option>
+                    <option value="Francês">Francês</option>
+                    <option value="Alemão">Alemão</option>
+                    <option value="Italiano">Italiano</option>
+                    <option value="Japonês">Japonês</option>
+                    <option value="Chinês simplificado">Chinês simplificado</option>
+                    <option value="other">Outro idioma</option>
+                  </select>
+                  <div id="custom-target-language-group" class="custom-language-group hidden">
+                    <label for="custom-target-language">Informe o idioma de destino</label>
+                    <input id="custom-target-language" class="language-input" type="text" maxlength="40" placeholder="Ex.: Coreano">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="analisar-fields" class="task-fields hidden" data-task-fields="analisar">
+            <div class="field-group">
+              <label for="analysis-focus-select" class="field-group__label">
+                <span class="material-symbols-outlined">insights</span>
+                Foco da análise <span class="field-group__optional">(opcional)</span>
+              </label>
+              <select id="analysis-focus-select" class="field-select">
+                <option value="">Visão geral</option>
+                <option value="Pontos fortes e fracos">Pontos fortes e fracos</option>
+                <option value="Riscos e cuidados">Riscos e cuidados</option>
+                <option value="Boas práticas e sugestões de melhoria">Boas práticas e sugestões</option>
+                <option value="Comparação entre alternativas">Comparação de alternativas</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="gerar_codigo-fields" class="task-fields hidden" data-task-fields="gerar_codigo">
+            <div class="field-group">
+              <label for="code-language-select" class="field-group__label">
+                <span class="material-symbols-outlined">terminal</span>
+                Linguagem ou tecnologia <span class="field-group__optional">(opcional)</span>
+              </label>
+              <select id="code-language-select" class="field-select">
+                <option value="">Não especificar</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="TypeScript">TypeScript</option>
+                <option value="Python">Python</option>
+                <option value="Java">Java</option>
+                <option value="C#">C#</option>
+                <option value="Go">Go</option>
+                <option value="Rust">Rust</option>
+                <option value="PHP">PHP</option>
+                <option value="Ruby">Ruby</option>
+                <option value="HTML/CSS">HTML/CSS</option>
+                <option value="SQL">SQL</option>
+                <option value="other">Outra linguagem/tecnologia</option>
+              </select>
+              <div id="code-language-custom-group" class="field-custom-group hidden">
+                <label for="code-language-custom">Informe a linguagem ou tecnologia</label>
+                <input id="code-language-custom" class="field-input" type="text" maxlength="40" placeholder="Ex.: Kotlin">
+              </div>
+            </div>
+          </div>
+
+          <div id="melhorar_texto-fields" class="task-fields hidden" data-task-fields="melhorar_texto">
+            <div class="field-group">
+              <label for="improve-style-select" class="field-group__label">
+                <span class="material-symbols-outlined">tune</span>
+                Estilo ou objetivo <span class="field-group__optional">(opcional)</span>
+              </label>
+              <select id="improve-style-select" class="field-select">
+                <option value="">Não especificar</option>
+                <option value="Mais formal">Mais formal</option>
+                <option value="Mais informal">Mais informal</option>
+                <option value="Mais direto e conciso">Mais direto e conciso</option>
+                <option value="Mais persuasivo">Mais persuasivo</option>
+                <option value="Tom mais amigável">Tom mais amigável</option>
+                <option value="Corrigir gramática e ortografia">Corrigir gramática e ortografia</option>
+                <option value="other">Outro objetivo</option>
+              </select>
+              <div id="improve-style-custom-group" class="field-custom-group hidden">
+                <label for="improve-style-custom">Informe o estilo ou objetivo</label>
+                <input id="improve-style-custom" class="field-input" type="text" maxlength="60" placeholder="Ex.: Tom acadêmico">
+              </div>
+            </div>
+          </div>
+        </div>
+
         <textarea
           id="prompt-input"
           class="prompt-input"
@@ -160,12 +249,15 @@
       </div>
     </section>
 
-    <aside class="history" aria-label="Suas conversas recentes">
+    <aside class="history" id="history-panel" aria-label="Suas conversas recentes">
       <div class="history__header">
-        <div>
-          <h2 class="history__title">Atividade recente</h2>
-          <p class="history__privacy">Retome suas últimas interações</p>
-        </div>
+        <button type="button" id="toggle-history-btn" class="history__toggle" aria-expanded="true" aria-controls="history-list">
+          <span>
+            <h2 class="history__title">Atividade recente</h2>
+            <p class="history__privacy">Retome suas últimas interações</p>
+          </span>
+          <span class="material-symbols-outlined history__toggle-icon" aria-hidden="true">expand_less</span>
+        </button>
         <div class="history__actions">
           <button type="button" id="export-history-btn" class="btn btn--ghost btn--icon" title="Baixar histórico" aria-label="Baixar histórico">
             <span class="material-symbols-outlined">download</span>
