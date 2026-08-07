@@ -54,6 +54,17 @@ Um ambiente web leve para tarefas assistidas por inteligência artificial com o 
 
    Abra `http://127.0.0.1:5000` no navegador.
 
+## Publicação no Render
+
+O arquivo `render.yaml` permite criar o serviço diretamente no Render:
+
+1. Acesse o [Render Dashboard](https://dashboard.render.com/) e escolha **New > Blueprint**.
+2. Conecte este repositório e confirme a configuração encontrada.
+3. Informe `GEMINI_API_KEY` quando solicitado. O valor é secreto e não deve ser salvo no repositório.
+4. Conclua a criação e aguarde o endereço público `onrender.com`.
+
+Cada novo push para a branch conectada inicia uma nova publicação automaticamente.
+
 ## Testes
 
 ```bash

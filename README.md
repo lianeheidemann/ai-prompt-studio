@@ -56,6 +56,17 @@ A lightweight web workspace for AI-assisted tasks with Google Gemini. Features s
 
    Open http://127.0.0.1:5000
 
+## Deploy on Render
+
+The included `render.yaml` can create the service directly on Render:
+
+1. Open the [Render Dashboard](https://dashboard.render.com/) and choose **New > Blueprint**.
+2. Connect this repository and confirm the detected configuration.
+3. Enter `GEMINI_API_KEY` when prompted. It is a secret and must not be committed to the repository.
+4. Finish creating the service and wait for its public `onrender.com` URL.
+
+Every push to the connected branch automatically triggers a new deployment.
+
 ## Testing
 
 ```bash
