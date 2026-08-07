@@ -1,4 +1,8 @@
-<img width="110" src="assets/icon/logo.png" alt="" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/icon/logo.png?v=1">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/icon/logo_2.png?v=1">
+  <img width="110" alt="" src="./assets/icon/logo.png?v=1">
+</picture>
 
 # AI Prompt Studio
 
