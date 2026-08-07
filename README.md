@@ -1,3 +1,5 @@
+<img width="110" src="assets/icon/logo.png" alt="CírioApp icon" />
+
 # AI Prompt Studio
 
 [![Python](https://img.shields.io/badge/Python_3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
