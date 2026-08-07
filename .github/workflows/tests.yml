@@ -34,4 +34,9 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Check JavaScript syntax
-        run: node --check static/script.js
+        run: |
+          node --check static/script.js
+          node --check static/conversationContext.js
+
+      - name: Run JavaScript tests
+        run: node --test tests/*.mjs

@@ -118,6 +118,107 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(mocked_generate.call_args.kwargs["source_language"], "Português")
         self.assertEqual(mocked_generate.call_args.kwargs["target_language"], "Inglês")
 
+    @patch.object(webapp, "generate_response", return_value="Resposta")
+    def test_context_missing_or_empty_is_accepted(self, mocked_generate):
+        without_context = self.client.post("/api/generate", json={
+            "prompt": "Oi",
+            "category": "resumir",
+            "mode": "conversation",
+        })
+        self.assertEqual(without_context.status_code, 200)
+        self.assertEqual(mocked_generate.call_args.kwargs["context"], [])
+
+        with_empty_context = self.client.post("/api/generate", json={
+            "prompt": "Oi",
+            "category": "resumir",
+            "mode": "conversation",
+            "context": [],
+        })
+        self.assertEqual(with_empty_context.status_code, 200)
+        self.assertEqual(mocked_generate.call_args.kwargs["context"], [])
+
+    def test_context_must_be_a_list(self):
+        for invalid_context in ("não é uma lista", {"role": "user", "text": "Oi"}):
+            response = self.client.post("/api/generate", json={
+                "prompt": "Oi",
+                "category": "resumir",
+                "mode": "conversation",
+                "context": invalid_context,
+            })
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.get_json()["code"], "invalid_context")
+
+    def test_context_item_that_is_not_an_object_is_rejected(self):
+        response = self.client.post("/api/generate", json={
+            "prompt": "Oi",
+            "category": "resumir",
+            "mode": "conversation",
+            "context": ["mensagem solta"],
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.get_json()["code"], "invalid_context")
+
+    def test_context_message_with_missing_or_empty_fields_is_rejected(self):
+        malformed_messages = [
+            [{"role": "user"}],
+            [{"role": "user", "text": "   "}],
+            [{"role": "user", "text": 123}],
+            [{"text": "Sem papel"}],
+        ]
+        for context in malformed_messages:
+            response = self.client.post("/api/generate", json={
+                "prompt": "Oi",
+                "category": "resumir",
+                "mode": "conversation",
+                "context": context,
+            })
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.get_json()["code"], "invalid_context_sequence")
+
+    def test_context_exceeds_message_limit(self):
+        context = [
+            {"role": "user" if i % 2 == 0 else "model", "text": f"Mensagem {i}"}
+            for i in range(6)
+        ]
+        response = self.client.post("/api/generate", json={
+            "prompt": "Oi",
+            "category": "resumir",
+            "mode": "conversation",
+            "context": context,
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.get_json()["code"], "context_too_large")
+
+    def test_context_exceeds_char_limit(self):
+        context = [
+            {"role": "user", "text": "a" * 60},
+            {"role": "model", "text": "b" * 60},
+        ]
+        response = self.client.post("/api/generate", json={
+            "prompt": "Oi",
+            "category": "resumir",
+            "mode": "conversation",
+            "context": context,
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.get_json()["code"], "context_too_large")
+
+    def test_context_must_end_with_model_role(self):
+        context = [
+            {"role": "user", "text": "Anterior"},
+            {"role": "model", "text": "Resposta anterior"},
+            {"role": "user", "text": "Outra pergunta"},
+        ]
+        response = self.client.post("/api/generate", json={
+            "prompt": "Oi",
+            "category": "resumir",
+            "mode": "conversation",
+            "context": context,
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.get_json()["code"], "invalid_context_sequence")
+
+
 class GeminiServiceTestCase(unittest.TestCase):
     def test_category_temperature_and_context_roles(self):
         calls = []
