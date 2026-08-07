@@ -48,7 +48,10 @@
           </button>
         </div>
         <div id="conversation-toolbar" class="conversation-toolbar hidden">
-          <p><span class="material-symbols-outlined">info</span> A IA usa as mensagens desta conversa para manter o contexto.</p>
+          <div class="conversation-toolbar__info">
+            <p><span class="material-symbols-outlined">info</span> A IA usa as mensagens desta conversa para manter o contexto.</p>
+            <p id="context-usage" class="context-usage hidden"></p>
+          </div>
           <button type="button" id="new-conversation-btn" class="btn btn--ghost btn--small">
             <span class="material-symbols-outlined">add_comment</span>
             Iniciar nova
@@ -246,6 +249,7 @@
       <div id="error-card" class="card error-card hidden" role="alert">
         <span class="material-symbols-outlined">error</span>
         <span id="error-message"></span>
+        <div id="error-actions" class="error-card__actions hidden"></div>
       </div>
     </section>
 
@@ -295,6 +299,6 @@
     </article>
   </template>
 
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 /** Front-end stateless: histórico local, conversa contextual e renderização segura. */
 
+import { buildConversationContext, estimateContextUsage } from "./conversationContext.js";
+
 const STORAGE_KEY = "aiPromptStudio.history.v1";
 const CONVERSATION_KEY = "aiPromptStudio.currentConversation.v1";
 const MAX_HISTORY_ITEMS = Number(document.body.dataset.maxHistoryItems) || 50;
@@ -13,12 +15,14 @@ const state = {
   currentConversationId: null,
   latestAnswer: "",
   isLoading: false,
+  storageBlocked: false,
 };
 
 const el = {
   modeOptions: Array.from(document.querySelectorAll(".mode-option")),
   conversationToolbar: document.getElementById("conversation-toolbar"),
   newConversationBtn: document.getElementById("new-conversation-btn"),
+  contextUsage: document.getElementById("context-usage"),
   chips: document.getElementById("category-chips"),
   taskFields: Array.from(document.querySelectorAll(".task-fields")),
   sourceLanguage: document.getElementById("source-language"),
@@ -44,6 +48,7 @@ const el = {
   copyBtn: document.getElementById("copy-btn"),
   errorCard: document.getElementById("error-card"),
   errorMessage: document.getElementById("error-message"),
+  errorActions: document.getElementById("error-actions"),
   historyPanel: document.getElementById("history-panel"),
   historyList: document.getElementById("history-list"),
   clearHistoryBtn: document.getElementById("clear-history-btn"),
@@ -91,6 +96,7 @@ function setMode(mode) {
   });
   el.conversationToolbar.classList.toggle("hidden", state.mode !== "conversation");
   updateSubmitLabel();
+  if (state.mode === "conversation") updateContextUsageIndicator();
 }
 
 function startNewConversation() {
@@ -102,6 +108,24 @@ function startNewConversation() {
   updateCharacterCount();
   el.promptInput.focus();
   hideError();
+  updateContextUsageIndicator();
+}
+
+function updateContextUsageIndicator() {
+  const usage = estimateContextUsage(state.history, state.currentConversationId, {
+    maxContextMessages: MAX_CONTEXT_MESSAGES,
+    maxContextChars: MAX_CONTEXT_CHARS,
+  });
+  const nearLimit = usage.messages >= usage.maxMessages * 0.8 || usage.chars >= usage.maxChars * 0.8;
+  el.contextUsage.textContent =
+    `${usage.messages}/${usage.maxMessages} mensagens · ${formatCompactNumber(usage.chars)}/${formatCompactNumber(usage.maxChars)} caracteres`;
+  el.contextUsage.classList.remove("hidden");
+  el.contextUsage.classList.toggle("context-usage--warning", nearLimit);
+}
+
+function formatCompactNumber(value) {
+  if (value < 1000) return String(value);
+  return `${(value / 1000).toFixed(1).replace(".0", "").replace(".", ",")}k`;
 }
 
 function setupChips() {
@@ -275,8 +299,16 @@ function loadLocalState() {
   } catch {
     state.history = [];
     state.currentConversationId = createId();
-    queueMicrotask(() => showError("O navegador bloqueou o armazenamento local. O histórico durará somente nesta página."));
+    warnStorageBlockedOnce();
   }
+}
+
+function warnStorageBlockedOnce() {
+  if (state.storageBlocked) return;
+  state.storageBlocked = true;
+  queueMicrotask(() => showError(
+    "O navegador bloqueou o armazenamento local. O histórico e a conversa atual não serão salvos ao recarregar a página."
+  ));
 }
 
 function persistHistory() {
@@ -294,6 +326,7 @@ function persistConversationId() {
     localStorage.setItem(CONVERSATION_KEY, state.currentConversationId);
   } catch {
     // O modo de conversa ainda funciona durante a página atual.
+    warnStorageBlockedOnce();
   }
 }
 
@@ -302,6 +335,7 @@ function addHistoryEntry(entry) {
   state.history = state.history.slice(0, MAX_HISTORY_ITEMS);
   persistHistory();
   renderHistory();
+  if (state.mode === "conversation") updateContextUsageIndicator();
 }
 
 /* Envio */
@@ -352,27 +386,6 @@ function setupSubmit() {
   });
 }
 
-function buildConversationContext() {
-  const maxTurns = Math.floor(MAX_CONTEXT_MESSAGES / 2);
-  const candidates = state.history.filter((entry) =>
-    entry.mode === "conversation" && entry.conversation_id === state.currentConversationId
-  );
-  const selected = [];
-  let totalChars = 0;
-
-  for (const entry of candidates) {
-    const pairChars = entry.prompt.length + entry.answer.length;
-    if (selected.length >= maxTurns || totalChars + pairChars > MAX_CONTEXT_CHARS) break;
-    selected.push(entry);
-    totalChars += pairChars;
-  }
-
-  return selected.reverse().flatMap((entry) => [
-    { role: "user", text: entry.prompt },
-    { role: "model", text: entry.answer },
-  ]);
-}
-
 async function handleSubmit() {
   if (state.isLoading) return;
   const prompt = el.promptInput.value.trim();
@@ -411,7 +424,12 @@ async function handleSubmit() {
       source_language: sourceLanguage,
       target_language: targetLanguage,
       mode: state.mode,
-      context: state.mode === "conversation" ? buildConversationContext() : [],
+      context: state.mode === "conversation"
+        ? buildConversationContext(state.history, state.currentConversationId, {
+            maxContextMessages: MAX_CONTEXT_MESSAGES,
+            maxContextChars: MAX_CONTEXT_CHARS,
+          })
+        : [],
     };
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -420,7 +438,9 @@ async function handleSubmit() {
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error(data.error || errorMessageForStatus(response.status));
+      const requestError = new Error(data.error || errorMessageForStatus(response.status));
+      requestError.code = data.code;
+      throw requestError;
     }
 
     const entry = normalizeEntry({
@@ -444,7 +464,7 @@ async function handleSubmit() {
     const message = error instanceof TypeError
       ? "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
       : error.message;
-    showError(message || "Não foi possível concluir a solicitação.");
+    showError(message || "Não foi possível concluir a solicitação.", { code: error.code });
   } finally {
     setLoading(false);
   }
@@ -536,8 +556,20 @@ function showResponse(entry) {
   el.responseCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-function showError(message) {
+function showError(message, { code } = {}) {
   el.errorMessage.textContent = message;
+  el.errorActions.replaceChildren();
+  if (code === "context_too_large") {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn--ghost btn--small";
+    button.textContent = "Nova conversa";
+    button.addEventListener("click", startNewConversation);
+    el.errorActions.appendChild(button);
+    el.errorActions.classList.remove("hidden");
+  } else {
+    el.errorActions.classList.add("hidden");
+  }
   el.errorCard.classList.remove("hidden");
 }
 
@@ -598,6 +630,7 @@ function deleteHistoryEntry(id) {
   state.history = state.history.filter((entry) => entry.id !== id);
   persistHistory();
   renderHistory();
+  if (state.mode === "conversation") updateContextUsageIndicator();
 }
 
 function setupHistoryActions() {
@@ -607,6 +640,7 @@ function setupHistoryActions() {
     state.history = [];
     persistHistory();
     renderHistory();
+    if (state.mode === "conversation") updateContextUsageIndicator();
   });
 
   el.exportHistoryBtn.addEventListener("click", exportHistory);

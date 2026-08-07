@@ -11,6 +11,7 @@
   --primary-soft: #f3ecfe;
   --danger: #d93025;
   --danger-bg: #fce8e6;
+  --warning: #b45309;
 
   --cat-resumir: #7c3aed;
   --cat-traduzir: #16a34a;
@@ -257,6 +258,23 @@ body {
 .conversation-toolbar p .material-symbols-outlined {
   color: var(--primary);
   font-size: 18px;
+}
+
+.conversation-toolbar__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.context-usage {
+  margin: 0 0 0 25px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.context-usage--warning {
+  color: var(--warning);
+  font-weight: 500;
 }
 
 /* Categorias */
@@ -583,11 +601,29 @@ body {
 .error-card {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   border-color: #f6c8c3;
   background: var(--danger-bg);
   color: var(--danger);
   font-size: 14px;
+}
+
+#error-message {
+  flex: 1 1 auto;
+}
+
+.error-card__actions {
+  margin-left: auto;
+}
+
+.error-card__actions .btn {
+  color: var(--danger);
+}
+
+.error-card__actions .btn:hover {
+  background: rgba(217, 48, 37, 0.08);
+  color: var(--danger);
 }
 
 .spin {

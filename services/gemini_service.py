@@ -200,6 +200,17 @@ def generate_response(
         logger.exception("Falha ao consultar a API do Gemini")
         raise _classify_api_error(exc) from exc
 
+    usage = getattr(response, "usage_metadata", None)
+    if usage is not None:
+        logger.info(
+            "Uso de tokens Gemini: categoria=%s modo=%s prompt_tokens=%s resposta_tokens=%s total_tokens=%s",
+            category,
+            "conversation" if context else "task",
+            usage.prompt_token_count,
+            usage.candidates_token_count,
+            usage.total_token_count,
+        )
+
     answer = getattr(response, "text", None)
     if not answer or not answer.strip():
         raise GeminiServiceError(

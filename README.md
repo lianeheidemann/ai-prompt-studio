@@ -74,6 +74,20 @@ Every push to the connected branch automatically triggers a new deployment.
 ```bash
 python -m unittest discover -s tests -v
 node --check static/script.js
+node --check static/conversationContext.js
+node --test tests/*.mjs
+```
+
+### Measuring conversation token usage
+
+`scripts/measure_conversation_tokens.py` measures real token counts for the
+"Continuous conversation" mode at a few conversation lengths, using
+`client.models.count_tokens` (no content is generated, so it's cheap, but it
+still requires a valid `GEMINI_API_KEY` and makes real API calls — it is not
+part of the automated test suite):
+
+```bash
+python scripts/measure_conversation_tokens.py
 ```
 
 ## Tech Stack

@@ -72,6 +72,20 @@ Cada novo push para a branch conectada inicia uma nova publicação automaticame
 ```bash
 python -m unittest discover -s tests -v
 node --check static/script.js
+node --check static/conversationContext.js
+node --test tests/*.mjs
+```
+
+### Medindo o consumo de tokens da conversa
+
+`scripts/measure_conversation_tokens.py` mede o consumo real de tokens do
+modo "Conversa contínua" em alguns tamanhos de conversa, usando
+`client.models.count_tokens` (não gera conteúdo, então é barato, mas ainda
+exige uma `GEMINI_API_KEY` válida e faz chamadas reais à API — não faz parte
+da suíte de testes automatizada):
+
+```bash
+python scripts/measure_conversation_tokens.py
 ```
 
 ## Tecnologias utilizadas
