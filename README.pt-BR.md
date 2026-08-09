@@ -50,6 +50,12 @@ Um ambiente web leve para tarefas assistidas por inteligência artificial com o 
    pip install -r requirements.txt
    ```
 
+   > **Observação (Windows + VS Code):** se o terminal for o PowerShell (padrão do VS Code no
+   > Windows), ative com `.venv\Scripts\Activate.ps1` em vez de `.venv\Scripts\activate`. Se a
+   > execução de scripts estiver bloqueada, rode antes `Set-ExecutionPolicy -Scope Process
+   > RemoteSigned`. Confirme também que o interpretador Python selecionado no VS Code aponta
+   > para o `.venv`, usando **Python: Select Interpreter** na Paleta de Comandos.
+
 2. **Adicione as variáveis de ambiente**
 
    ```bash
