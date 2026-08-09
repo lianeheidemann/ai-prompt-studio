@@ -1,0 +1,61 @@
+name: Sync README with code changes
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+      - "README.pt-BR.md"
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Update README with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            COMMIT: ${{ github.sha }}
+
+            Run `git diff HEAD~1 HEAD` to see what this push to main changed.
+
+            If the change affects anything documented in README.md or
+            README.pt-BR.md (features, setup/install steps, environment
+            variables, project structure, available commands, dependencies,
+            etc.):
+
+            1. Update README.md accordingly.
+            2. Apply the equivalent update to README.pt-BR.md, keeping it in
+               Portuguese (pt-BR) and consistent with README.md.
+            3. Configure git identity:
+               git config user.name "github-actions[bot]"
+               git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            4. Create a new branch named `readme-sync/<short-sha>`, commit the
+               changes with message "docs: sync README with latest changes",
+               push it, and open a pull request against `main` with
+               `gh pr create` including a short summary of what changed and
+               why.
+
+            If nothing in the READMEs needs to change, do not create a
+            branch, commit, or PR — just stop.
+
+            Never push directly to main.
+
+          claude_args: |
+            --allowedTools "Read,Write,Edit,Bash(git:*),Bash(gh:*)"
+            --max-turns 15
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
