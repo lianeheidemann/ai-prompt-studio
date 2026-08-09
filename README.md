@@ -1,10 +1,6 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/icon/logo.png?v=1">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/icon/logo_2.png?v=1">
-  <img width="110" alt="" src="./assets/icon/logo.png?v=1">
-</picture>  
-
-
+<p align="left">
+  <img width="110" alt="AI Prompt Studio animated logo" src="./assets/icon/logo-robo-animada.svg?v=1">
+</p>
 
 # AI Prompt Studio ![Status](https://img.shields.io/badge/status-in%20development-6366f1?style=flat-square&logo=git&logoColor=white)
 
