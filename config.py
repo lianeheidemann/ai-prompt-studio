@@ -21,6 +21,11 @@ class Config:
     MAX_CONTEXT_CHARS: int = int(os.getenv("MAX_CONTEXT_CHARS", "30000"))
     MAX_CONTENT_LENGTH: int = int(os.getenv("MAX_REQUEST_BYTES", "65536"))
 
+    # Janela de contexto do modelo usada para estimar "tokens disponíveis" na
+    # interface. É uma aproximação da capacidade do modelo, não uma cota de
+    # faturamento — a API do Gemini não expõe a cota restante de uma chave.
+    GEMINI_MAX_CONTEXT_TOKENS: int = int(os.getenv("GEMINI_MAX_CONTEXT_TOKENS", "1000000"))
+
     # Limite simples por IP. Para múltiplas instâncias, substitua por Redis.
     RATE_LIMIT_REQUESTS: int = int(os.getenv("RATE_LIMIT_REQUESTS", "10"))
     RATE_LIMIT_WINDOW_SECONDS: int = int(os.getenv("RATE_LIMIT_WINDOW_SECONDS", "60"))

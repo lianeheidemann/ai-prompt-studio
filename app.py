@@ -213,7 +213,7 @@ def generate():
             return language_error
 
     try:
-        answer = generate_response(
+        result = generate_response(
             prompt=prompt,
             category=category,
             context=context,
@@ -226,6 +226,11 @@ def generate():
         logger.exception("Erro inesperado ao gerar resposta")
         return _error("Ocorreu um erro inesperado. Tente novamente.", "internal_error", 500)
 
+    tokens_available = (
+        max(int(app.config["GEMINI_MAX_CONTEXT_TOKENS"]) - result.total_tokens, 0)
+        if result.total_tokens is not None else None
+    )
+
     return jsonify({
         "id": str(uuid4()),
         "category": category,
@@ -234,9 +239,11 @@ def generate():
         "source_language": source_language,
         "target_language": target_language,
         "prompt": prompt,
-        "answer": answer,
-        "answer_html": _render_markdown(answer),
+        "answer": result.answer,
+        "answer_html": _render_markdown(result.answer),
         "timestamp": datetime.now(timezone.utc).isoformat(),
+        "tokens_spent": result.total_tokens,
+        "tokens_available": tokens_available,
     }), 200
 
 

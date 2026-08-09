@@ -1,5 +1,6 @@
 """Integração stateless com a API do Google Gemini."""
 
+from dataclasses import dataclass
 from functools import lru_cache
 import logging
 
@@ -94,6 +95,16 @@ CONVERSATION_INSTRUCTION = (
 )
 
 
+@dataclass(frozen=True)
+class GenerationResult:
+    """Resposta da IA com o uso de tokens reportado pela API do Gemini."""
+
+    answer: str
+    prompt_tokens: int | None
+    completion_tokens: int | None
+    total_tokens: int | None
+
+
 class GeminiServiceError(Exception):
     """Falha da integração com uma mensagem segura para o usuário."""
 
@@ -156,7 +167,7 @@ def generate_response(
     context: list[dict[str, str]] | None = None,
     target_language: str | None = None,
     source_language: str | None = None,
-) -> str:
+) -> GenerationResult:
     """Gera uma resposta sem persistir prompt, resposta ou contexto no servidor."""
     metadata = CATEGORIES.get(category)
     if metadata is None:
@@ -201,14 +212,17 @@ def generate_response(
         raise _classify_api_error(exc) from exc
 
     usage = getattr(response, "usage_metadata", None)
+    prompt_tokens = getattr(usage, "prompt_token_count", None) if usage is not None else None
+    completion_tokens = getattr(usage, "candidates_token_count", None) if usage is not None else None
+    total_tokens = getattr(usage, "total_token_count", None) if usage is not None else None
     if usage is not None:
         logger.info(
             "Uso de tokens Gemini: categoria=%s modo=%s prompt_tokens=%s resposta_tokens=%s total_tokens=%s",
             category,
             "conversation" if context else "task",
-            usage.prompt_token_count,
-            usage.candidates_token_count,
-            usage.total_token_count,
+            prompt_tokens,
+            completion_tokens,
+            total_tokens,
         )
 
     answer = getattr(response, "text", None)
@@ -218,4 +232,9 @@ def generate_response(
             code="ai_empty_response",
             status_code=502,
         )
-    return answer.strip()
+    return GenerationResult(
+        answer=answer.strip(),
+        prompt_tokens=prompt_tokens,
+        completion_tokens=completion_tokens,
+        total_tokens=total_tokens,
+    )
