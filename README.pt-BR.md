@@ -1,17 +1,20 @@
-<p align="left">
-  <img width="110" alt="Logo animada do AI Prompt Studio" src="./assets/icon/logo-robo-animada.svg?v=1">
-</p>
+<div align="center">
+  <img width="110" alt="AI Prompt Studio animated logo" src="./assets/icon/logo-robo-animada.svg?v=1">
 
-# AI Prompt Studio ![Status](https://img.shields.io/badge/status-in%20development-6366f1?style=flat-square&logo=git&logoColor=white)
+  <h1>
+    AI Prompt Studio
+    <img alt="Status: in development" src="https://img.shields.io/badge/status-in%20development-6366f1?style=flat-square&amp;logo=git&amp;logoColor=white">
+  </h1>
 
-[![Python](https://img.shields.io/badge/Python-0D1117?style=for-the-badge&logo=python&logoColor=3776AB)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-0D1117?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![Gemini](https://img.shields.io/badge/Gemini_API-0D1117?style=for-the-badge&logo=googlegemini&logoColor=8E75B2)](https://ai.google.dev/)
-[![HTML5](https://img.shields.io/badge/HTML5-0D1117?style=for-the-badge&logo=html5&logoColor=E34F26)](https://developer.mozilla.org/docs/Web/HTML)
-[![CSS3](https://img.shields.io/badge/CSS3-0D1117?style=for-the-badge&logo=css3&logoColor=1572B6)](https://developer.mozilla.org/docs/Web/CSS)
-[![JavaScript](https://img.shields.io/badge/JavaScript-0D1117?style=for-the-badge&logo=javascript&logoColor=F7DF1E)](https://developer.mozilla.org/docs/Web/JavaScript)
-
-
+  <p>
+    <a href="https://www.python.org/"><img alt="Python" src="https://img.shields.io/badge/Python-0D1117?style=for-the-badge&amp;logo=python&amp;logoColor=3776AB"></a>
+    <a href="https://flask.palletsprojects.com/"><img alt="Flask" src="https://img.shields.io/badge/Flask-0D1117?style=for-the-badge&amp;logo=flask&amp;logoColor=white"></a>
+    <a href="https://ai.google.dev/"><img alt="Gemini API" src="https://img.shields.io/badge/Gemini_API-0D1117?style=for-the-badge&amp;logo=googlegemini&amp;logoColor=8E75B2"></a>
+    <a href="https://developer.mozilla.org/docs/Web/HTML"><img alt="HTML5" src="https://img.shields.io/badge/HTML5-0D1117?style=for-the-badge&amp;logo=html5&amp;logoColor=E34F26"></a>
+    <a href="https://developer.mozilla.org/docs/Web/CSS"><img alt="CSS3" src="https://img.shields.io/badge/CSS3-0D1117?style=for-the-badge&amp;logo=css3&amp;logoColor=1572B6"></a>
+    <a href="https://developer.mozilla.org/docs/Web/JavaScript"><img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-0D1117?style=for-the-badge&amp;logo=javascript&amp;logoColor=F7DF1E"></a>
+  </p>
+</div>
 
 **Demonstração:** [ai-prompt-studio-av25.onrender.com](https://ai-prompt-studio-av25.onrender.com)
 
