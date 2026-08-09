@@ -48,15 +48,23 @@ A lightweight web workspace for AI-assisted tasks with Google Gemini. Features s
    git clone https://github.com/lianeheidemann/ai-prompt-studio.git
    cd ai-prompt-studio
    python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   pip install -r requirements.txt
    ```
 
-   > **Windows + VS Code note:** if your terminal is PowerShell (VS Code's default on
-   > Windows), activate with `.venv\Scripts\Activate.ps1` instead of `.venv\Scripts\activate`.
-   > If script execution is blocked, run `Set-ExecutionPolicy -Scope Process RemoteSigned`
-   > first. Also confirm VS Code's selected Python interpreter points to `.venv` via
-   > **Python: Select Interpreter** in the Command Palette.
+   macOS/Linux:
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+   Windows (VS Code integrated terminal — PowerShell):
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 2. **Add environment variables**
 
