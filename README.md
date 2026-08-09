@@ -51,6 +51,12 @@ A lightweight web workspace for AI-assisted tasks with Google Gemini. Features s
    pip install -r requirements.txt
    ```
 
+   > **Windows + VS Code note:** if your terminal is PowerShell (VS Code's default on
+   > Windows), activate with `.venv\Scripts\Activate.ps1` instead of `.venv\Scripts\activate`.
+   > If script execution is blocked, run `Set-ExecutionPolicy -Scope Process RemoteSigned`
+   > first. Also confirm VS Code's selected Python interpreter points to `.venv` via
+   > **Python: Select Interpreter** in the Command Palette.
+
 2. **Add environment variables**
 
    ```bash
