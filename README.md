@@ -139,7 +139,13 @@ Settings via environment variables in `config.py`:
 
 ## Interface
 
+#### Desktop 
+
 ![Interface do AI Prompt Studio](assets/interface/demonstracao.gif)
+
+#### Mobile
+
+![Interface do AI Prompt Studio](assets/interface/demonstracao-mobile.gif)
 
 ---
 
