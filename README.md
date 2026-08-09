@@ -141,7 +141,7 @@ Settings via environment variables in `config.py`:
 
 #### Desktop 
 
-<img width="80%" alt="" src="./assets/interface/demonstration-desktop.gif?v=2">
+<img alt="" src="./assets/interface/demonstration-desktop.gif?v=2">
 
 #### Mobile
 
