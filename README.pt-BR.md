@@ -131,8 +131,14 @@ As configurações são definidas por variáveis de ambiente no arquivo `config.
   
 ## Interface
 
-![Interface do AI Prompt Studio](assets/interface/demonstracao.gif)
+#### Desktop 
 
-## Licença
+<img alt="" src="./assets/interface/demonstration-desktop.gif?v=2">
 
-MIT
+#### Mobile
+
+<img width="40%" alt="" src="./assets/interface/demonstration-mobile.gif?v=2">
+
+---
+
+<p align="center">Desenvolvedora: <strong>Liane Heidemann</strong></p>
