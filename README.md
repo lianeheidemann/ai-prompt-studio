@@ -141,11 +141,11 @@ Settings via environment variables in `config.py`:
 
 #### Desktop 
 
-<img width="80%" alt="" src="./assets/interface/demonstracao.gif?v=1">
+<img width="80%" alt="" src="./assets/interface/demonstration-desktop.gif?v=2">
 
 #### Mobile
 
-<img width="40%" alt="" src="./assets/interface/demonstracao-mobile.gif?v=1">
+<img width="40%" alt="" src="./assets/interface/demonstration-mobile.gif?v=2">
 
 ---
 
