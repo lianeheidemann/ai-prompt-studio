@@ -45,15 +45,23 @@ Um ambiente web leve para tarefas assistidas por inteligência artificial com o 
    git clone https://github.com/lianeheidemann/ai-prompt-studio.git
    cd ai-prompt-studio
    python -m venv .venv
-   source .venv/bin/activate  # No Windows: .venv\Scripts\activate
-   pip install -r requirements.txt
    ```
 
-   > **Observação (Windows + VS Code):** se o terminal for o PowerShell (padrão do VS Code no
-   > Windows), ative com `.venv\Scripts\Activate.ps1` em vez de `.venv\Scripts\activate`. Se a
-   > execução de scripts estiver bloqueada, rode antes `Set-ExecutionPolicy -Scope Process
-   > RemoteSigned`. Confirme também que o interpretador Python selecionado no VS Code aponta
-   > para o `.venv`, usando **Python: Select Interpreter** na Paleta de Comandos.
+   macOS/Linux:
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+   Windows (terminal integrado do VS Code — PowerShell):
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 2. **Adicione as variáveis de ambiente**
 
