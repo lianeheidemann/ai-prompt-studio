@@ -141,11 +141,11 @@ Settings via environment variables in `config.py`:
 
 #### Desktop 
 
-![Interface do AI Prompt Studio](assets/interface/demonstracao.gif)
+<img width="80%" alt="" src="./assets/interface/demonstracao.gif?v=1">
 
 #### Mobile
 
-![Interface do AI Prompt Studio](assets/interface/demonstracao-mobile.gif)
+<img width="40%" alt="" src="./assets/interface/demonstracao-mobile.gif?v=1">
 
 ---
 
