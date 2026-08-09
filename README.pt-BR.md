@@ -2,35 +2,41 @@
   <source media="(prefers-color-scheme: dark)" srcset="./assets/icon/logo.png?v=1">
   <source media="(prefers-color-scheme: light)" srcset="./assets/icon/logo_2.png?v=1">
   <img width="110" alt="" src="./assets/icon/logo.png?v=1">
-</picture>
+</picture>  
 
-# AI Prompt Studio
 
-[![Python](https://img.shields.io/badge/Python_3.10+-3776AB?style=for-the-badge\&logo=python\&logoColor=white)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask_3.0-181717?style=for-the-badge\&logo=flask\&logoColor=white)](https://flask.palletsprojects.com/)
-[![Gemini API](https://img.shields.io/badge/Gemini_API-8E75B2?style=for-the-badge\&logo=googlegemini\&logoColor=white)](https://ai.google.dev/)
-[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge\&logo=html5\&logoColor=white)](https://developer.mozilla.org/docs/Web/HTML)
-[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge\&logo=css\&logoColor=white)](https://developer.mozilla.org/docs/Web/CSS)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge\&logo=javascript\&logoColor=181717)](https://developer.mozilla.org/docs/Web/JavaScript)
+
+# AI Prompt Studio ![Status](https://img.shields.io/badge/status-in%20development-6366f1?style=flat-square&logo=git&logoColor=white)
+
+[![Python](https://img.shields.io/badge/Python-0D1117?style=for-the-badge&logo=python&logoColor=3776AB)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-0D1117?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![Gemini](https://img.shields.io/badge/Gemini_API-0D1117?style=for-the-badge&logo=googlegemini&logoColor=8E75B2)](https://ai.google.dev/)
+[![HTML5](https://img.shields.io/badge/HTML5-0D1117?style=for-the-badge&logo=html5&logoColor=E34F26)](https://developer.mozilla.org/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-0D1117?style=for-the-badge&logo=css3&logoColor=1572B6)](https://developer.mozilla.org/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-0D1117?style=for-the-badge&logo=javascript&logoColor=F7DF1E)](https://developer.mozilla.org/docs/Web/JavaScript)
+
+
 
 **Demonstração:** [ai-prompt-studio-av25.onrender.com](https://ai-prompt-studio-av25.onrender.com)
 
 Um ambiente web leve para tarefas assistidas por inteligência artificial com o Google Gemini. Conta com seis fluxos de trabalho especializados, conversas contextuais e histórico armazenado localmente no navegador.
 
+> **Observação:** a interface e todas as mensagens estão disponíveis somente em português (pt-BR), sem seletor de idioma.
+
 ## Funcionalidades
 
-* **6 fluxos de trabalho especializados**: resumir, traduzir, explicar código, gerar código, melhorar prompts e criar ideias
-* **Dois modos de uso**: tarefa única ou conversa contínua com reconhecimento de contexto
-* **Histórico privado**: todos os dados são armazenados localmente no navegador, sem armazenamento no servidor
-* **Design responsivo**: funciona de forma fluida em computadores e dispositivos móveis
-* **Segurança**: Markdown sanitizado, limites de tamanho das requisições e limitação de solicitações por endereço IP
+- **6 fluxos de trabalho especializados**: resumir, traduzir, explicar código, gerar código, melhorar prompts e criar ideias
+- **Dois modos de uso**: tarefa única ou conversa contínua com reconhecimento de contexto
+- **Histórico privado**: todos os dados são armazenados localmente no navegador, sem armazenamento no servidor
+- **Design responsivo**: funciona de forma fluida em computadores e dispositivos móveis
+- **Segurança**: Markdown sanitizado, limites de tamanho das requisições e limitação de solicitações por endereço IP
 
 ## Início rápido
 
 ### Pré-requisitos
 
-* Python 3.10+
-* Chave da API do Google Gemini
+- Python 3.10+
+- Chave da API do Google Gemini
 
 ### Configuração
 
@@ -94,9 +100,9 @@ python scripts/measure_conversation_tokens.py
 
 ## Tecnologias utilizadas
 
-* **Backend**: Python 3.10+, Flask 3 e Google Gen AI SDK
-* **Frontend**: HTML, CSS e JavaScript, sem frameworks
-* **Utilitários**: Mistune para Markdown e Bleach para sanitização
+- **Backend**: Python 3.10+, Flask 3 e Google Gen AI SDK
+- **Frontend**: HTML, CSS e JavaScript, sem frameworks
+- **Utilitários**: Mistune para Markdown e Bleach para sanitização
 
 ## Arquitetura
 
@@ -124,11 +130,11 @@ As configurações são definidas por variáveis de ambiente no arquivo `config.
 
 ## Privacidade
 
-* Os prompts e as respostas **nunca são armazenados** no servidor
-* Todo o histórico permanece apenas no `localStorage` do navegador
-* As requisições são validadas e sanitizadas antes do processamento
-* A limitação de requisições ajuda a impedir abusos originados de um único endereço IP
-  
+- Os prompts e as respostas **nunca são armazenados** no servidor
+- Todo o histórico permanece apenas no `localStorage` do navegador
+- As requisições são validadas e sanitizadas antes do processamento
+- A limitação de requisições ajuda a impedir abusos originados de um único endereço IP
+
 ## Interface
 
 #### Desktop 
