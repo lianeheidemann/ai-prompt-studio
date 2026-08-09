@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 512 512"
+     role="img"
+     aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">Logo animada de robô</title>
+  <desc id="logoDesc">Balão de conversa em forma de robô, com olhos piscando e movimento suave da cabeça.</desc>
+
+  <style>
+    .stop-blue { stop-color: #168dff; }
+    .stop-indigo { stop-color: #4c5cff; }
+    .stop-purple { stop-color: #b425ff; }
+    .eye-fill { fill: #314fc7; }
+    .eye-stroke { stroke: #172c8e; }
+    .mouth-fill { stroke: #314fc7; }
+    .glow-color { flood-color: #526cff; }
+
+    @media (prefers-color-scheme: dark) {
+      .stop-blue { stop-color: #31a8ff; }
+      .stop-indigo { stop-color: #6170ff; }
+      .stop-purple { stop-color: #c33cff; }
+      .eye-fill { fill: #5875ff; }
+      .eye-stroke { stroke: #3047c7; }
+      .mouth-fill { stroke: #5875ff; }
+      .glow-color { flood-color: #6f7dff; }
+    }
+
+    svg[data-theme="light"] .stop-blue { stop-color: #168dff; }
+    svg[data-theme="light"] .stop-indigo { stop-color: #4c5cff; }
+    svg[data-theme="light"] .stop-purple { stop-color: #b425ff; }
+    svg[data-theme="light"] .eye-fill { fill: #314fc7; }
+    svg[data-theme="light"] .eye-stroke { stroke: #172c8e; }
+    svg[data-theme="light"] .mouth-fill { stroke: #314fc7; }
+    svg[data-theme="light"] .glow-color { flood-color: #526cff; }
+
+    svg[data-theme="dark"] .stop-blue { stop-color: #31a8ff; }
+    svg[data-theme="dark"] .stop-indigo { stop-color: #6170ff; }
+    svg[data-theme="dark"] .stop-purple { stop-color: #c33cff; }
+    svg[data-theme="dark"] .eye-fill { fill: #5875ff; }
+    svg[data-theme="dark"] .eye-stroke { stroke: #3047c7; }
+    svg[data-theme="dark"] .mouth-fill { stroke: #5875ff; }
+    svg[data-theme="dark"] .glow-color { flood-color: #6f7dff; }
+
+    .head {
+      transform-box: view-box;
+      transform-origin: 256px 278px;
+      animation: headMove 6s ease-in-out infinite;
+    }
+
+    .eyes {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: blink 5.4s ease-in-out infinite;
+    }
+
+    @keyframes headMove {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      22%      { transform: rotate(-2.2deg) translateY(-2px); }
+      50%      { transform: rotate(1.8deg) translateY(1px); }
+      76%      { transform: rotate(-0.8deg) translateY(-1px); }
+    }
+
+    @keyframes blink {
+      0%, 40%, 44%, 48%, 100% { transform: scaleY(1); }
+      42%, 46%                 { transform: scaleY(0.08); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .head, .eyes { animation: none; }
+    }
+  </style>
+
+  <defs>
+    <linearGradient id="bodyGradient" x1="75" y1="155" x2="445" y2="390" gradientUnits="userSpaceOnUse">
+      <stop class="stop-blue" offset="0"/>
+      <stop class="stop-indigo" offset="0.5"/>
+      <stop class="stop-purple" offset="1"/>
+    </linearGradient>
+
+    <linearGradient id="antennaGradient" x1="215" y1="36" x2="297" y2="140" gradientUnits="userSpaceOnUse">
+      <stop class="stop-indigo" offset="0"/>
+      <stop class="stop-blue" offset="1"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood class="glow-color" flood-opacity="0.22"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <mask id="bubbleCutout" maskUnits="userSpaceOnUse" x="55" y="112" width="410" height="370">
+      <rect x="0" y="0" width="512" height="512" fill="black"/>
+      <rect x="62" y="118" width="388" height="292" rx="140" fill="white"/>
+      <path d="M139 353V465a13 13 0 0 0 20 11l123-78Z" fill="white"/>
+      <rect x="112" y="170" width="288" height="190" rx="92" fill="black"/>
+      <path d="M178 335v65l79-51Z" fill="black"/>
+    </mask>
+  </defs>
+
+  <g class="head">
+    <g filter="url(#softGlow)">
+      <path d="M238 132V91h36v41Z" fill="url(#antennaGradient)"/>
+      <circle cx="256" cy="68" r="38" fill="url(#antennaGradient)"/>
+
+      <rect x="55" y="112" width="410" height="370"
+            fill="url(#bodyGradient)" mask="url(#bubbleCutout)"/>
+    </g>
+
+    <g class="face">
+      <g class="eyes">
+        <circle class="eye-fill eye-stroke" cx="183" cy="260" r="25" stroke-width="5"/>
+        <circle class="eye-fill eye-stroke" cx="329" cy="260" r="25" stroke-width="5"/>
+        <circle cx="175" cy="252" r="6" fill="#ffffff" opacity="0.16"/>
+        <circle cx="321" cy="252" r="6" fill="#ffffff" opacity="0.16"/>
+      </g>
+
+      <path d="M224 305c18 21 46 21 64 0"
+            fill="none"
+            class="eye-stroke"
+            stroke-width="17"
+            stroke-linecap="round"/>
+      <path d="M224 301c18 21 46 21 64 0"
+            fill="none"
+            class="mouth-fill"
+            stroke-width="11"
+            stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>
