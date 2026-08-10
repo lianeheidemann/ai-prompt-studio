@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="110" alt="AI Prompt Studio animated logo" src="./assets/icon/logo-robo-giro-suave.svg?v=2">
+  <img width="110" alt="AI Prompt Studio animated logo" src="./assets/icon/logo-robo-giro-horizontal-3d.svg?v=1">
 
   <h1>
     AI Prompt Studio
