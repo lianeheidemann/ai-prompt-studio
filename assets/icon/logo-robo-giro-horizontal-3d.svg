@@ -82,11 +82,10 @@
     }
 
     .depth-layer,
-    .front,
-    .back {
+    .front {
       transform-box: view-box;
       transform-origin: 256px 270px;
-      backface-visibility: hidden;
+      backface-visibility: visible;
     }
 
     .depth-layer {
@@ -94,7 +93,6 @@
     }
 
     .front { transform: translateZ(22px); }
-    .back { transform: rotateY(180deg) translateZ(22px); }
 
     .eyes {
       transform-box: fill-box;
@@ -127,12 +125,6 @@
       <stop class="stop-blue" offset="0"/>
       <stop class="stop-indigo" offset="0.5"/>
       <stop class="stop-purple" offset="1"/>
-    </linearGradient>
-
-    <linearGradient id="backGradient" x1="445" y1="155" x2="75" y2="390" gradientUnits="userSpaceOnUse">
-      <stop class="stop-purple" offset="0"/>
-      <stop class="stop-indigo" offset="0.5"/>
-      <stop class="stop-blue" offset="1"/>
     </linearGradient>
 
     <linearGradient id="edgeGradient" x1="55" y1="100" x2="465" y2="448" gradientUnits="userSpaceOnUse">
@@ -196,10 +188,6 @@
         <use class="depth-layer" href="#robotBody" style="transform: translateZ(12px)"/>
         <use class="depth-layer" href="#robotBody" style="transform: translateZ(16px)"/>
         <use class="depth-layer" href="#robotBody" style="transform: translateZ(20px)"/>
-      </g>
-
-      <g class="back" filter="url(#softGlow)" fill="url(#backGradient)">
-        <use href="#robotBody"/>
       </g>
 
       <g class="front">
