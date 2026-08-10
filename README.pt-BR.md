@@ -158,7 +158,7 @@ As configurações são definidas por variáveis de ambiente no arquivo `config.
 
 #### Desktop 
 
-<img alt="" src="./assets/interface/demonstration-desktop.gif?v=3">
+<img width="80%" alt="" src="./assets/interface/demonstration-desktop.gif?v=3">
 
 #### Mobile
 
