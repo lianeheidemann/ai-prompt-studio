@@ -152,11 +152,11 @@ As configurações são definidas por variáveis de ambiente no arquivo `config.
 
 #### Desktop 
 
-<img alt="" src="./assets/interface/demonstration-desktop.gif?v=2">
+<img alt="" src="./assets/interface/demonstration-desktop.gif?v=3">
 
 #### Mobile
 
-<img width="40%" alt="" src="./assets/interface/demonstration-mobile.gif?v=2">
+<img width="40%" alt="" src="./assets/interface/demonstration-mobile.gif?v=3">
 
 ---
 
