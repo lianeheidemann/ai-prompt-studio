@@ -1,0 +1,226 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 512 512"
+     role="img"
+     aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">Logo de robô com giro horizontal em 3D</title>
+  <desc id="logoDesc">Balão de conversa em forma de robô girando horizontalmente no próprio eixo, com profundidade visível nas laterais.</desc>
+
+  <style>
+    :root {
+      --blue: #168dff;
+      --indigo: #4c5cff;
+      --purple: #b425ff;
+      --face: #314fc7;
+      --face-outline: #172c8e;
+      --edge-light: #7387ff;
+      --edge-mid: #3548b8;
+      --edge-dark: #111d69;
+      --glow: #526cff;
+    }
+
+    .stop-blue { stop-color: var(--blue); }
+    .stop-indigo { stop-color: var(--indigo); }
+    .stop-purple { stop-color: var(--purple); }
+    .stop-edge-light { stop-color: var(--edge-light); }
+    .stop-edge-mid { stop-color: var(--edge-mid); }
+    .stop-edge-dark { stop-color: var(--edge-dark); }
+    .eye-fill { fill: var(--face); }
+    .eye-stroke { stroke: var(--face-outline); }
+    .mouth-fill { stroke: var(--face); }
+    .glow-color { flood-color: var(--glow); }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --blue: #31a8ff;
+        --indigo: #7380ff;
+        --purple: #d057ff;
+        --face: #8aa0ff;
+        --face-outline: #4059d7;
+        --edge-light: #a6b2ff;
+        --edge-mid: #5368dc;
+        --edge-dark: #1c2b7d;
+        --glow: #8b96ff;
+      }
+    }
+
+    svg[data-theme="light"] {
+      --blue: #168dff;
+      --indigo: #4c5cff;
+      --purple: #b425ff;
+      --face: #314fc7;
+      --face-outline: #172c8e;
+      --edge-light: #7387ff;
+      --edge-mid: #3548b8;
+      --edge-dark: #111d69;
+      --glow: #526cff;
+    }
+
+    svg[data-theme="dark"] {
+      --blue: #31a8ff;
+      --indigo: #7380ff;
+      --purple: #d057ff;
+      --face: #8aa0ff;
+      --face-outline: #4059d7;
+      --edge-light: #a6b2ff;
+      --edge-mid: #5368dc;
+      --edge-dark: #1c2b7d;
+      --glow: #8b96ff;
+    }
+
+    .scene {
+      transform-box: view-box;
+      transform-origin: 256px 270px;
+      perspective: 900px;
+    }
+
+    .robot-3d {
+      transform-box: view-box;
+      transform-origin: 256px 270px;
+      transform-style: preserve-3d;
+      animation: horizontalSpin 8s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .depth-layer,
+    .front,
+    .back {
+      transform-box: view-box;
+      transform-origin: 256px 270px;
+      backface-visibility: hidden;
+    }
+
+    .depth-layer {
+      opacity: 0.96;
+    }
+
+    .front { transform: translateZ(22px); }
+    .back { transform: rotateY(180deg) translateZ(22px); }
+
+    .eyes {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: blink 4.8s ease-in-out infinite;
+    }
+
+    @keyframes horizontalSpin {
+      0%, 10%  { transform: rotateY(0deg); }
+      46%      { transform: rotateY(180deg); }
+      54%      { transform: rotateY(180deg); }
+      90%, 100% { transform: rotateY(360deg); }
+    }
+
+    @keyframes blink {
+      0%, 38%, 43%, 48%, 100% { transform: scaleY(1); }
+      40.5%, 45.5%             { transform: scaleY(0.08); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .robot-3d,
+      .eyes {
+        animation: none;
+      }
+    }
+  </style>
+
+  <defs>
+    <linearGradient id="bodyGradient" x1="75" y1="155" x2="445" y2="390" gradientUnits="userSpaceOnUse">
+      <stop class="stop-blue" offset="0"/>
+      <stop class="stop-indigo" offset="0.5"/>
+      <stop class="stop-purple" offset="1"/>
+    </linearGradient>
+
+    <linearGradient id="backGradient" x1="445" y1="155" x2="75" y2="390" gradientUnits="userSpaceOnUse">
+      <stop class="stop-purple" offset="0"/>
+      <stop class="stop-indigo" offset="0.5"/>
+      <stop class="stop-blue" offset="1"/>
+    </linearGradient>
+
+    <linearGradient id="edgeGradient" x1="55" y1="100" x2="465" y2="448" gradientUnits="userSpaceOnUse">
+      <stop class="stop-edge-light" offset="0"/>
+      <stop class="stop-edge-mid" offset="0.48"/>
+      <stop class="stop-edge-dark" offset="1"/>
+    </linearGradient>
+
+    <linearGradient id="antennaGradient" x1="215" y1="36" x2="297" y2="140" gradientUnits="userSpaceOnUse">
+      <stop class="stop-indigo" offset="0"/>
+      <stop class="stop-blue" offset="1"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood class="glow-color" flood-opacity="0.24"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="edgeShade" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" result="soft"/>
+      <feSpecularLighting in="soft" surfaceScale="5" specularConstant="0.55"
+                          specularExponent="18" lighting-color="#ffffff" result="shine">
+        <feDistantLight azimuth="225" elevation="42"/>
+      </feSpecularLighting>
+      <feComposite in="shine" in2="SourceAlpha" operator="in" result="shineCut"/>
+      <feBlend in="SourceGraphic" in2="shineCut" mode="screen"/>
+    </filter>
+
+    <mask id="bubbleCutout" maskUnits="userSpaceOnUse" x="55" y="112" width="410" height="370">
+      <rect width="512" height="512" fill="black"/>
+      <rect x="62" y="118" width="388" height="292" rx="140" fill="white"/>
+      <path d="M139 353V465a13 13 0 0 0 20 11l123-78Z" fill="white"/>
+      <rect x="112" y="170" width="288" height="190" rx="92" fill="black"/>
+      <path d="M178 335v65l79-51Z" fill="black"/>
+    </mask>
+
+    <g id="robotBody">
+      <path d="M238 132V91h36v41Z"/>
+      <circle cx="256" cy="68" r="38"/>
+      <rect x="55" y="112" width="410" height="370" mask="url(#bubbleCutout)"/>
+    </g>
+  </defs>
+
+  <g class="scene">
+    <g class="robot-3d">
+      <!-- Camadas de extrusão: preservam a espessura quando a logo fica de lado. -->
+      <g filter="url(#edgeShade)" fill="url(#edgeGradient)">
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(-20px)"/>
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(-16px)"/>
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(-12px)"/>
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(-8px)"/>
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(-4px)"/>
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(0)"/>
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(4px)"/>
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(8px)"/>
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(12px)"/>
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(16px)"/>
+        <use class="depth-layer" href="#robotBody" style="transform: translateZ(20px)"/>
+      </g>
+
+      <g class="back" filter="url(#softGlow)" fill="url(#backGradient)">
+        <use href="#robotBody"/>
+      </g>
+
+      <g class="front">
+        <g filter="url(#softGlow)" fill="url(#bodyGradient)">
+          <use href="#robotBody"/>
+        </g>
+
+        <g class="face">
+          <g class="eyes">
+            <circle class="eye-fill eye-stroke" cx="183" cy="260" r="25" stroke-width="5"/>
+            <circle class="eye-fill eye-stroke" cx="329" cy="260" r="25" stroke-width="5"/>
+            <circle cx="175" cy="252" r="6" fill="#ffffff" opacity="0.16"/>
+            <circle cx="321" cy="252" r="6" fill="#ffffff" opacity="0.16"/>
+          </g>
+
+          <path d="M224 305c18 21 46 21 64 0"
+                fill="none" class="eye-stroke" stroke-width="17" stroke-linecap="round"/>
+          <path d="M224 301c18 21 46 21 64 0"
+                fill="none" class="mouth-fill" stroke-width="11" stroke-linecap="round"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
