@@ -45,6 +45,7 @@ const el = {
   responseCard: document.getElementById("response-card"),
   responseTitle: document.getElementById("response-title"),
   responseBody: document.getElementById("response-body"),
+  responseUsage: document.getElementById("response-usage"),
   copyBtn: document.getElementById("copy-btn"),
   errorCard: document.getElementById("error-card"),
   errorMessage: document.getElementById("error-message"),
@@ -104,6 +105,7 @@ function startNewConversation() {
   persistConversationId();
   state.latestAnswer = "";
   el.responseCard.classList.add("hidden");
+  el.responseUsage.classList.add("hidden");
   el.promptInput.value = "";
   updateCharacterCount();
   el.promptInput.focus();
@@ -128,6 +130,17 @@ function formatCompactNumber(value) {
   return `${(value / 1000).toFixed(1).replace(".0", "").replace(".", ",")}k`;
 }
 
+function updateResponseUsage(entry) {
+  if (typeof entry.tokens_spent !== "number" || typeof entry.tokens_available !== "number") {
+    el.responseUsage.classList.add("hidden");
+    el.responseUsage.textContent = "";
+    return;
+  }
+  el.responseUsage.textContent =
+    `Tokens disponíveis: ${entry.tokens_available.toLocaleString("pt-BR")} · Tokens gastos: ${entry.tokens_spent.toLocaleString("pt-BR")}`;
+  el.responseUsage.classList.remove("hidden");
+}
+
 function setupChips() {
   const chips = Array.from(el.chips.querySelectorAll(".chip"));
   chips.forEach((chip) => {
@@ -144,6 +157,7 @@ function setupChips() {
       state.selectedCategory = chip.dataset.category;
       // Um resultado ou erro anterior pertence à tarefa que o gerou, não à nova seleção.
       el.responseCard.classList.add("hidden");
+      el.responseUsage.classList.add("hidden");
       hideError();
       applyCategoryPresentation(chip);
     });
@@ -285,6 +299,8 @@ function normalizeEntry(value) {
     answer: value.answer,
     answer_html: typeof value.answer_html === "string" ? value.answer_html : "",
     timestamp: typeof value.timestamp === "string" ? value.timestamp : new Date().toISOString(),
+    tokens_spent: typeof value.tokens_spent === "number" ? value.tokens_spent : null,
+    tokens_available: typeof value.tokens_available === "number" ? value.tokens_available : null,
   };
 }
 
@@ -552,6 +568,7 @@ function showResponse(entry) {
   el.responseCard.style.setProperty("--response-color", categoryColor(entry.category));
   el.responseTitle.textContent = `${entry.mode === "conversation" ? "Conversa" : "Resposta"} — ${entry.category_label}`;
   renderMarkdown(el.responseBody, entry.answer_html, entry.answer);
+  updateResponseUsage(entry);
   el.responseCard.classList.remove("hidden");
   el.responseCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }

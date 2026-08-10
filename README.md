@@ -138,6 +138,7 @@ Settings via environment variables in `config.py`:
 | `MAX_PROMPT_LENGTH` | 10000 | Max input characters |
 | `MAX_CONTEXT_MESSAGES` | 12 | Conversation history size |
 | `MAX_CONTEXT_CHARS` | 30000 | Max characters of conversation context sent to the model |
+| `GEMINI_MAX_CONTEXT_TOKENS` | 1000000 | Model context window used to estimate "tokens available" in the UI |
 | `MAX_REQUEST_BYTES` | 65536 | Max request body size accepted by Flask |
 | `MAX_HISTORY_ITEMS` | 50 | Browser history limit |
 | `RATE_LIMIT_REQUESTS` | 10 | Requests per window |

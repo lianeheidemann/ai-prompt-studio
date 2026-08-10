@@ -136,6 +136,7 @@ As configurações são definidas por variáveis de ambiente no arquivo `config.
 | `MAX_PROMPT_LENGTH`         |        10000 | Número máximo de caracteres por entrada                  |
 | `MAX_CONTEXT_MESSAGES`      |           12 | Quantidade de mensagens mantidas no contexto da conversa |
 | `MAX_CONTEXT_CHARS`         |        30000 | Limite de caracteres do contexto enviado ao modelo        |
+| `GEMINI_MAX_CONTEXT_TOKENS` |       1000000 | Janela de contexto do modelo usada para estimar "tokens disponíveis" na interface |
 | `MAX_REQUEST_BYTES`         |        65536 | Tamanho máximo do corpo da requisição aceito pelo Flask   |
 | `MAX_HISTORY_ITEMS`         |           50 | Limite de itens no histórico do navegador                |
 | `RATE_LIMIT_REQUESTS`       |           10 | Número máximo de requisições por intervalo               |

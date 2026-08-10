@@ -6,6 +6,11 @@ from unittest.mock import patch
 
 import app as webapp
 from services import gemini_service
+from services.gemini_service import GenerationResult
+
+
+def _result(answer, *, total=15):
+    return GenerationResult(answer=answer, prompt_tokens=max(total - 5, 0), completion_tokens=5, total_tokens=total)
 
 
 class AppTestCase(unittest.TestCase):
@@ -17,6 +22,7 @@ class AppTestCase(unittest.TestCase):
             MAX_CONTEXT_CHARS=100,
             RATE_LIMIT_REQUESTS=100,
             RATE_LIMIT_WINDOW_SECONDS=60,
+            GEMINI_MAX_CONTEXT_TOKENS=1000,
         )
         webapp._rate_limit_entries.clear()
         self.client = webapp.app.test_client()
@@ -30,7 +36,7 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(self.client.get("/api/history").status_code, 404)
         self.assertEqual(self.client.post("/api/history/clear").status_code, 404)
 
-    @patch.object(webapp, "generate_response", return_value="**Olá** <script>alert(1)</script>")
+    @patch.object(webapp, "generate_response", return_value=_result("**Olá** <script>alert(1)</script>"))
     def test_generate_returns_sanitized_markdown(self, mocked_generate):
         response = self.client.post("/api/generate", json={
             "prompt": "Olá",
@@ -64,7 +70,7 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(invalid.status_code, 400)
         self.assertEqual(invalid.get_json()["code"], "invalid_context_sequence")
 
-    @patch.object(webapp, "generate_response", return_value="Resposta")
+    @patch.object(webapp, "generate_response", return_value=_result("Resposta"))
     def test_rate_limit_returns_retry_after(self, _mocked_generate):
         webapp.app.config["RATE_LIMIT_REQUESTS"] = 1
         payload = {"prompt": "Teste", "category": "resumir", "mode": "task"}
@@ -92,7 +98,7 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(invalid.status_code, 400)
         self.assertEqual(invalid.get_json()["code"], "invalid_target_language")
 
-    @patch.object(webapp, "generate_response", return_value="Olá")
+    @patch.object(webapp, "generate_response", return_value=_result("Olá"))
     def test_translation_sends_and_returns_target_language(self, mocked_generate):
         response = self.client.post("/api/generate", json={
             "prompt": "Hello",
@@ -105,7 +111,7 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(mocked_generate.call_args.kwargs["target_language"], "Português")
         self.assertEqual(response.get_json()["source_language"], "Detectar automaticamente")
 
-    @patch.object(webapp, "generate_response", return_value="Hello")
+    @patch.object(webapp, "generate_response", return_value=_result("Hello"))
     def test_translation_sends_selected_source_and_target_languages(self, mocked_generate):
         response = self.client.post("/api/generate", json={
             "prompt": "Olá",
@@ -118,7 +124,7 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(mocked_generate.call_args.kwargs["source_language"], "Português")
         self.assertEqual(mocked_generate.call_args.kwargs["target_language"], "Inglês")
 
-    @patch.object(webapp, "generate_response", return_value="Resposta")
+    @patch.object(webapp, "generate_response", return_value=_result("Resposta"))
     def test_context_missing_or_empty_is_accepted(self, mocked_generate):
         without_context = self.client.post("/api/generate", json={
             "prompt": "Oi",
@@ -218,6 +224,37 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.get_json()["code"], "invalid_context_sequence")
 
+    @patch.object(
+        webapp,
+        "generate_response",
+        return_value=GenerationResult(answer="Resposta", prompt_tokens=100, completion_tokens=50, total_tokens=150),
+    )
+    def test_generate_returns_token_usage_fields(self, _mocked_generate):
+        response = self.client.post("/api/generate", json={"prompt": "Oi", "category": "resumir"})
+        data = response.get_json()
+        self.assertEqual(data["tokens_spent"], 150)
+        self.assertEqual(data["tokens_available"], 850)
+
+    @patch.object(
+        webapp,
+        "generate_response",
+        return_value=GenerationResult(answer="Resposta", prompt_tokens=1900, completion_tokens=100, total_tokens=2000),
+    )
+    def test_generate_tokens_available_floors_at_zero(self, _mocked_generate):
+        response = self.client.post("/api/generate", json={"prompt": "Oi", "category": "resumir"})
+        self.assertEqual(response.get_json()["tokens_available"], 0)
+
+    @patch.object(
+        webapp,
+        "generate_response",
+        return_value=GenerationResult(answer="Resposta", prompt_tokens=None, completion_tokens=None, total_tokens=None),
+    )
+    def test_generate_omits_token_fields_when_usage_unavailable(self, _mocked_generate):
+        response = self.client.post("/api/generate", json={"prompt": "Oi", "category": "resumir"})
+        data = response.get_json()
+        self.assertIsNone(data["tokens_spent"])
+        self.assertIsNone(data["tokens_available"])
+
 
 class GeminiServiceTestCase(unittest.TestCase):
     def test_category_temperature_and_context_roles(self):
@@ -230,7 +267,7 @@ class GeminiServiceTestCase(unittest.TestCase):
 
         fake_client = SimpleNamespace(models=FakeModels())
         with patch.object(gemini_service, "_get_client", return_value=fake_client):
-            gemini_service.generate_response(
+            result = gemini_service.generate_response(
                 "Continue",
                 "ideias",
                 [
@@ -241,6 +278,8 @@ class GeminiServiceTestCase(unittest.TestCase):
 
         self.assertEqual(calls[0]["config"].temperature, 0.9)
         self.assertEqual([item.role for item in calls[0]["contents"]], ["user", "model", "user"])
+        self.assertEqual(result.answer, "Resposta")
+        self.assertIsNone(result.total_tokens)
 
 
 if __name__ == "__main__":
