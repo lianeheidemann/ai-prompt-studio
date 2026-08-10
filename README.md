@@ -155,11 +155,11 @@ Settings via environment variables in `config.py`:
 
 #### Desktop 
 
-<img alt="" src="./assets/interface/demonstration-desktop.gif?v=3">
+<img alt="" src="./assets/interface/demonstration-desktop-v2.gif?v=3">
 
 #### Mobile
 
-<img width="40%" alt="" src="./assets/interface/demonstration-mobile.gif?v=3">
+<img width="40%" alt="" src="./assets/interface/demonstration-mobile-v2.gif?v=3">
 
 ---
 
