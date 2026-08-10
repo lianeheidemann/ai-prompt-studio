@@ -160,7 +160,7 @@ Settings via environment variables in `config.py`:
 
 #### Desktop 
 
-<img alt="" src="./assets/interface/demonstration-desktop-v2.gif?v=3">
+<img width="80%" alt="" src="./assets/interface/demonstration-desktop-v2.gif?v=3">
 
 #### Mobile
 
