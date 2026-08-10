@@ -45,8 +45,13 @@ const el = {
   responseCard: document.getElementById("response-card"),
   responseTitle: document.getElementById("response-title"),
   responseBody: document.getElementById("response-body"),
-  responseUsage: document.getElementById("response-usage"),
   copyBtn: document.getElementById("copy-btn"),
+  tokenUsageCard: document.getElementById("token-usage-card"),
+  tokenUsageSpent: document.getElementById("token-usage-spent"),
+  tokenUsageAvailable: document.getElementById("token-usage-available"),
+  tokenUsageBar: document.getElementById("token-usage-bar"),
+  tokenUsageBarFill: document.getElementById("token-usage-bar-fill"),
+  tokenUsageNote: document.getElementById("token-usage-note"),
   errorCard: document.getElementById("error-card"),
   errorMessage: document.getElementById("error-message"),
   errorActions: document.getElementById("error-actions"),
@@ -105,7 +110,6 @@ function startNewConversation() {
   persistConversationId();
   state.latestAnswer = "";
   el.responseCard.classList.add("hidden");
-  el.responseUsage.classList.add("hidden");
   el.promptInput.value = "";
   updateCharacterCount();
   el.promptInput.focus();
@@ -130,15 +134,24 @@ function formatCompactNumber(value) {
   return `${(value / 1000).toFixed(1).replace(".0", "").replace(".", ",")}k`;
 }
 
-function updateResponseUsage(entry) {
+function updateTokenUsageCard(entry) {
   if (typeof entry.tokens_spent !== "number" || typeof entry.tokens_available !== "number") {
-    el.responseUsage.classList.add("hidden");
-    el.responseUsage.textContent = "";
     return;
   }
-  el.responseUsage.textContent =
-    `Tokens disponíveis: ${entry.tokens_available.toLocaleString("pt-BR")} · Tokens gastos: ${entry.tokens_spent.toLocaleString("pt-BR")}`;
-  el.responseUsage.classList.remove("hidden");
+  const limit = entry.tokens_spent + entry.tokens_available;
+  const percentUsed = limit > 0 ? Math.min(100, Math.round((entry.tokens_spent / limit) * 100)) : 0;
+  const nearLimit = percentUsed >= 80;
+
+  el.tokenUsageSpent.textContent = entry.tokens_spent.toLocaleString("pt-BR");
+  el.tokenUsageAvailable.textContent = entry.tokens_available.toLocaleString("pt-BR");
+  el.tokenUsageBarFill.style.width = `${percentUsed}%`;
+  el.tokenUsageBarFill.classList.toggle("token-usage__bar-fill--warning", nearLimit);
+  el.tokenUsageBar.setAttribute("aria-valuenow", String(percentUsed));
+  el.tokenUsageNote.textContent = nearLimit
+    ? `${percentUsed}% do limite de contexto já foi usado. Considere iniciar uma nova conversa.`
+    : `${percentUsed}% do limite de contexto usado até agora.`;
+  el.tokenUsageNote.classList.toggle("token-usage__note--warning", nearLimit);
+  el.tokenUsageCard.classList.remove("hidden");
 }
 
 function setupChips() {
@@ -157,7 +170,6 @@ function setupChips() {
       state.selectedCategory = chip.dataset.category;
       // Um resultado ou erro anterior pertence à tarefa que o gerou, não à nova seleção.
       el.responseCard.classList.add("hidden");
-      el.responseUsage.classList.add("hidden");
       hideError();
       applyCategoryPresentation(chip);
     });
@@ -467,6 +479,7 @@ async function handleSubmit() {
       conversation_id: state.mode === "conversation" ? state.currentConversationId : null,
     });
     if (!entry) throw new Error("A resposta recebida está incompleta.");
+    updateTokenUsageCard(entry);
     if (entry.category !== state.selectedCategory) {
       // O usuário trocou de tarefa enquanto a resposta ainda carregava: só o histórico recebe o resultado.
       addHistoryEntry(entry);
@@ -568,7 +581,6 @@ function showResponse(entry) {
   el.responseCard.style.setProperty("--response-color", categoryColor(entry.category));
   el.responseTitle.textContent = `${entry.mode === "conversation" ? "Conversa" : "Resposta"} — ${entry.category_label}`;
   renderMarkdown(el.responseBody, entry.answer_html, entry.answer);
-  updateResponseUsage(entry);
   el.responseCard.classList.remove("hidden");
   el.responseCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }

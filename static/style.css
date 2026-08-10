@@ -131,6 +131,13 @@ body {
   gap: 18px;
 }
 
+.sidebar-column {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .card,
 .history {
   border: 1px solid rgba(218, 225, 235, 0.92);
@@ -273,6 +280,104 @@ body {
 }
 
 .context-usage--warning {
+  color: var(--warning);
+  font-weight: 500;
+}
+
+/* Uso de tokens */
+
+.token-usage-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.token-usage__header {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.token-usage__header > .material-symbols-outlined {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.token-usage__title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.1px;
+}
+
+.token-usage__subtitle {
+  margin: 3px 0 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.token-usage__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.token-usage__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.token-usage__stat-label {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.token-usage__stat-value {
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+
+.token-usage__bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.token-usage__bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--primary);
+  border-radius: 999px;
+  transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.token-usage__bar-fill--warning {
+  background: var(--warning);
+}
+
+.token-usage__note {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.token-usage__note--warning {
   color: var(--warning);
   font-weight: 500;
 }

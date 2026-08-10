@@ -244,7 +244,6 @@
           </button>
         </div>
         <div id="response-body" class="response-card__body markdown-body"></div>
-        <p id="response-usage" class="context-usage hidden"></p>
       </div>
 
       <div id="error-card" class="card error-card hidden" role="alert">
@@ -254,26 +253,60 @@
       </div>
     </section>
 
-    <aside class="history" id="history-panel" aria-label="Suas conversas recentes">
-      <div class="history__header">
-        <button type="button" id="toggle-history-btn" class="history__toggle" aria-expanded="true" aria-controls="history-list">
-          <span>
-            <h2 class="history__title">Atividade recente</h2>
-            <p class="history__privacy">Retome suas últimas interações</p>
-          </span>
-          <span class="material-symbols-outlined history__toggle-icon" aria-hidden="true">expand_less</span>
-        </button>
-        <div class="history__actions">
-          <button type="button" id="export-history-btn" class="btn btn--ghost btn--icon" title="Baixar histórico" aria-label="Baixar histórico">
-            <span class="material-symbols-outlined">download</span>
-          </button>
-          <button type="button" id="clear-history-btn" class="btn btn--ghost btn--icon" title="Limpar atividade" aria-label="Limpar atividade">
-            <span class="material-symbols-outlined">delete_sweep</span>
-          </button>
+    <div class="sidebar-column">
+      <section id="token-usage-card" class="card token-usage-card hidden" aria-live="polite">
+        <div class="token-usage__header">
+          <span class="material-symbols-outlined">data_usage</span>
+          <div>
+            <h2 class="token-usage__title">Uso de tokens</h2>
+            <p class="token-usage__subtitle">Consumo da última mensagem enviada</p>
+          </div>
         </div>
-      </div>
-      <div id="history-list" class="history__list"></div>
-    </aside>
+        <div class="token-usage__stats">
+          <div class="token-usage__stat">
+            <span class="token-usage__stat-label">Gastos agora</span>
+            <strong id="token-usage-spent" class="token-usage__stat-value">—</strong>
+          </div>
+          <div class="token-usage__stat">
+            <span class="token-usage__stat-label">Disponíveis</span>
+            <strong id="token-usage-available" class="token-usage__stat-value">—</strong>
+          </div>
+        </div>
+        <div
+          id="token-usage-bar"
+          class="token-usage__bar"
+          role="progressbar"
+          aria-label="Percentual do limite de contexto usado"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <div id="token-usage-bar-fill" class="token-usage__bar-fill"></div>
+        </div>
+        <p id="token-usage-note" class="token-usage__note"></p>
+      </section>
+
+      <aside class="history" id="history-panel" aria-label="Suas conversas recentes">
+        <div class="history__header">
+          <button type="button" id="toggle-history-btn" class="history__toggle" aria-expanded="true" aria-controls="history-list">
+            <span>
+              <h2 class="history__title">Atividade recente</h2>
+              <p class="history__privacy">Retome suas últimas interações</p>
+            </span>
+            <span class="material-symbols-outlined history__toggle-icon" aria-hidden="true">expand_less</span>
+          </button>
+          <div class="history__actions">
+            <button type="button" id="export-history-btn" class="btn btn--ghost btn--icon" title="Baixar histórico" aria-label="Baixar histórico">
+              <span class="material-symbols-outlined">download</span>
+            </button>
+            <button type="button" id="clear-history-btn" class="btn btn--ghost btn--icon" title="Limpar atividade" aria-label="Limpar atividade">
+              <span class="material-symbols-outlined">delete_sweep</span>
+            </button>
+          </div>
+        </div>
+        <div id="history-list" class="history__list"></div>
+      </aside>
+    </div>
   </main>
 
   <footer class="footer">
