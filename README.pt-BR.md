@@ -7,6 +7,11 @@
   </h1>
 
   <p>
+    <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml/badge.svg"></a>
+    <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml"><img alt="Sync README with code changes" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml/badge.svg"></a>
+  </p>
+
+  <p>
     <a href="https://www.python.org/"><img alt="Python" src="https://img.shields.io/badge/Python-0D1117?style=for-the-badge&amp;logo=python&amp;logoColor=3776AB"></a>
     <a href="https://flask.palletsprojects.com/"><img alt="Flask" src="https://img.shields.io/badge/Flask-0D1117?style=for-the-badge&amp;logo=flask&amp;logoColor=white"></a>
     <a href="https://ai.google.dev/"><img alt="Gemini API" src="https://img.shields.io/badge/Gemini_API-0D1117?style=for-the-badge&amp;logo=googlegemini&amp;logoColor=8E75B2"></a>
