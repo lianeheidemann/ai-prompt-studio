@@ -2,7 +2,7 @@
   <img width="110" alt="AI Prompt Studio animated logo" src="./assets/icon/logo-robo-giro-horizontal-3d.svg?v=2">
 
   <h1>
-    AI Prompt Studio
+    AI Prompt Studio<br>
     <img alt="Status: in development" src="https://img.shields.io/badge/status-in%20development-6366f1?style=flat-square&amp;logo=git&amp;logoColor=white">
   </h1>
 

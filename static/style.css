@@ -325,8 +325,8 @@ body {
 /* Idioma da tradução */
 
 .translation-options {
-  display: grid;
-  grid-template-columns: minmax(180px, 0.7fr) minmax(360px, 1.3fr);
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 16px;
   margin-top: 18px;
@@ -340,6 +340,7 @@ body {
   display: flex;
   align-items: center;
   gap: 11px;
+  flex: 1 1 200px;
 }
 
 .translation-options__heading > .material-symbols-outlined {
@@ -372,9 +373,11 @@ body {
 
 .translation-language-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: minmax(120px, 1fr) auto minmax(120px, 1fr);
   align-items: start;
   gap: 10px;
+  flex: 2 1 320px;
+  min-width: 0;
 }
 
 .language-field {
@@ -986,8 +989,7 @@ a:focus-visible {
     border-radius: 15px;
   }
 
-  .mode-selector,
-  .translation-options {
+  .mode-selector {
     grid-template-columns: 1fr;
   }
 
