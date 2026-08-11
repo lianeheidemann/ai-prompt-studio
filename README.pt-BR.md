@@ -160,11 +160,11 @@ As configurações são definidas por variáveis de ambiente no arquivo `config.
 
 #### Desktop 
 
-<img width="80%" alt="" src="./assets/interface/demonstration-desktop.gif?v=3">
+<img width="80%" alt="" src="./assets/interface/demonstration-desktop-v3.gif?v=3">
 
 #### Mobile
 
-<img width="40%" alt="" src="./assets/interface/demonstration-mobile.gif?v=3">
+<img width="40%" alt="" src="./assets/interface/demonstration-mobile-v3.gif?v=3">
 
 ---
 
