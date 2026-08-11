@@ -164,7 +164,7 @@ As configurações são definidas por variáveis de ambiente no arquivo `config.
 
 #### Mobile
 
-<img width="40%" alt="" src="./assets/interface/demonstration-mobile.gif?v=3">
+<img width="30%" alt="" src="./assets/interface/demonstration-mobile.gif?v=3">
 
 ---
 
