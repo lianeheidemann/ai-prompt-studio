@@ -76,6 +76,8 @@ Um ambiente web leve para tarefas assistidas por inteligência artificial com o 
    GEMINI_MODEL=gemini-3.5-flash
    ```
 
+   > **Limites de uso da API Gemini:** As cotas e os limites de requisições variam conforme o modelo e o nível de uso. Consulte a [documentação oficial de limites da API Gemini](https://ai.google.dev/gemini-api/docs/rate-limits) para verificar os limites atuais de requisições e tokens antes de selecionar ou alterar `GEMINI_MODEL`.
+
 3. **Execute a aplicação**
 
    ```bash
