@@ -59,6 +59,6 @@ jobs:
 
           claude_args: |
             --allowedTools "Read,Write,Edit,Bash(git:*),Bash(gh:*)"
-            --max-turns 15
+            --max-turns 30
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
