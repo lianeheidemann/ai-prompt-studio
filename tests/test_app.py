@@ -233,6 +233,8 @@ class AppTestCase(unittest.TestCase):
         response = self.client.post("/api/generate", json={"prompt": "Oi", "category": "resumir"})
         data = response.get_json()
         self.assertEqual(data["tokens_spent"], 150)
+        self.assertEqual(data["tokens_prompt"], 100)
+        self.assertEqual(data["tokens_completion"], 50)
         self.assertEqual(data["tokens_available"], 850)
 
     @patch.object(
@@ -253,6 +255,8 @@ class AppTestCase(unittest.TestCase):
         response = self.client.post("/api/generate", json={"prompt": "Oi", "category": "resumir"})
         data = response.get_json()
         self.assertIsNone(data["tokens_spent"])
+        self.assertIsNone(data["tokens_prompt"])
+        self.assertIsNone(data["tokens_completion"])
         self.assertIsNone(data["tokens_available"])
 
 
