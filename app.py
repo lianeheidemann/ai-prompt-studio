@@ -307,6 +307,8 @@ def generate():
         "answer_html": _render_markdown(result.answer),
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "tokens_spent": result.total_tokens,
+        "tokens_prompt": result.prompt_tokens,
+        "tokens_completion": result.completion_tokens,
         "tokens_available": tokens_available,
         "global_tokens_spent": global_tokens_spent,
         "model": model,

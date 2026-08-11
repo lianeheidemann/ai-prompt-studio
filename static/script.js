@@ -457,6 +457,8 @@ function normalizeEntry(value) {
     answer_html: typeof value.answer_html === "string" ? value.answer_html : "",
     timestamp: typeof value.timestamp === "string" ? value.timestamp : new Date().toISOString(),
     tokens_spent: typeof value.tokens_spent === "number" ? value.tokens_spent : null,
+    tokens_prompt: typeof value.tokens_prompt === "number" ? value.tokens_prompt : null,
+    tokens_completion: typeof value.tokens_completion === "number" ? value.tokens_completion : null,
     tokens_available: typeof value.tokens_available === "number" ? value.tokens_available : null,
   };
 }
@@ -732,7 +734,12 @@ function appendTokenConsumptionNote(container, entry) {
   if (typeof entry.tokens_spent !== "number") return;
   const note = document.createElement("p");
   note.className = "token-consumption-note";
-  note.textContent = `[Tokens Consumidos: ${entry.tokens_spent.toLocaleString("pt-BR")}]`;
+  const hasBreakdown = typeof entry.tokens_prompt === "number" && typeof entry.tokens_completion === "number";
+  note.textContent = hasBreakdown
+    ? `[Tokens Consumidos: ${entry.tokens_spent.toLocaleString("pt-BR")} `
+      + `(entrada + instruções: ${entry.tokens_prompt.toLocaleString("pt-BR")} · `
+      + `resposta: ${entry.tokens_completion.toLocaleString("pt-BR")})]`
+    : `[Tokens Consumidos: ${entry.tokens_spent.toLocaleString("pt-BR")}]`;
   container.appendChild(note);
 }
 
