@@ -4,22 +4,30 @@ import { buildConversationContext, estimateContextUsage } from "./conversationCo
 
 const STORAGE_KEY = "aiPromptStudio.history.v1";
 const CONVERSATION_KEY = "aiPromptStudio.currentConversation.v1";
+const MODEL_KEY = "aiPromptStudio.selectedModel.v1";
 const MAX_HISTORY_ITEMS = Number(document.body.dataset.maxHistoryItems) || 50;
 const MAX_CONTEXT_MESSAGES = Number(document.body.dataset.maxContextMessages) || 12;
 const MAX_CONTEXT_CHARS = Number(document.body.dataset.maxContextChars) || 30000;
 
 const state = {
   selectedCategory: null,
+  selectedModel: null,
   mode: "task",
   history: [],
   currentConversationId: null,
   latestAnswer: "",
   isLoading: false,
   storageBlocked: false,
+  modelUsage: {},
 };
 
 const el = {
   modeOptions: Array.from(document.querySelectorAll(".mode-option")),
+  modelOptions: Array.from(document.querySelectorAll(".model-option")),
+  modelUsageStat: document.getElementById("model-usage-stat"),
+  modelUsageLabel: document.getElementById("model-usage-label"),
+  modelUsageValue: document.getElementById("model-usage-value"),
+  modelUsageNote: document.getElementById("model-usage-note"),
   conversationToolbar: document.getElementById("conversation-toolbar"),
   newConversationBtn: document.getElementById("new-conversation-btn"),
   contextUsage: document.getElementById("context-usage"),
@@ -45,8 +53,15 @@ const el = {
   responseCard: document.getElementById("response-card"),
   responseTitle: document.getElementById("response-title"),
   responseBody: document.getElementById("response-body"),
-  responseUsage: document.getElementById("response-usage"),
   copyBtn: document.getElementById("copy-btn"),
+  tokenUsageCard: document.getElementById("token-usage-card"),
+  tokenUsageSpent: document.getElementById("token-usage-spent"),
+  tokenUsageAvailable: document.getElementById("token-usage-available"),
+  tokenUsageBar: document.getElementById("token-usage-bar"),
+  tokenUsageBarFill: document.getElementById("token-usage-bar-fill"),
+  tokenUsageNote: document.getElementById("token-usage-note"),
+  tokenUsageGlobal: document.getElementById("token-usage-global"),
+  tokenUsageGlobalValue: document.getElementById("token-usage-global-value"),
   errorCard: document.getElementById("error-card"),
   errorMessage: document.getElementById("error-message"),
   errorActions: document.getElementById("error-actions"),
@@ -68,6 +83,7 @@ function createId() {
 function init() {
   loadLocalState();
   setupModes();
+  setupModelSelector();
   setupChips();
   setupTaskFieldControls();
   setupPromptInput();
@@ -76,6 +92,131 @@ function init() {
   setupHistoryActions();
   setupHistoryToggle();
   renderHistory();
+  loadGlobalTokenUsage();
+  loadModelUsage();
+}
+
+/* Seleção de modelo */
+
+function setupModelSelector() {
+  const activeOption = el.modelOptions.find((option) => option.classList.contains("model-option--active"));
+  const storedModel = readStoredModel();
+  const initialModel = el.modelOptions.some((option) => option.dataset.model === storedModel)
+    ? storedModel
+    : activeOption?.dataset.model || el.modelOptions[0]?.dataset.model || null;
+
+  state.selectedModel = initialModel;
+  el.modelOptions.forEach((option) => {
+    option.addEventListener("click", () => selectModel(option.dataset.model));
+  });
+  applySelectedModel();
+}
+
+function selectModel(model) {
+  if (!model || model === state.selectedModel) return;
+  state.selectedModel = model;
+  applySelectedModel();
+  persistSelectedModel();
+  renderModelUsage();
+}
+
+function applySelectedModel() {
+  el.modelOptions.forEach((option) => {
+    const active = option.dataset.model === state.selectedModel;
+    option.classList.toggle("model-option--active", active);
+    option.setAttribute("aria-checked", String(active));
+  });
+}
+
+function readStoredModel() {
+  try {
+    return window.localStorage.getItem(MODEL_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function persistSelectedModel() {
+  try {
+    window.localStorage.setItem(MODEL_KEY, state.selectedModel);
+  } catch {
+    // Sem acesso ao localStorage: a escolha vale só para esta sessão.
+  }
+}
+
+async function loadModelUsage() {
+  try {
+    const response = await fetch("/api/model-usage");
+    if (!response.ok) return;
+    const data = await response.json().catch(() => null);
+    if (!data || !Array.isArray(data.models)) return;
+    state.modelUsage = Object.fromEntries(data.models.map((model) => [model.id, model]));
+    renderModelUsage();
+  } catch {
+    // Sem conexão ou servidor indisponível: mantém o indicador oculto.
+  }
+}
+
+function renderModelUsage() {
+  const usage = state.modelUsage[state.selectedModel];
+  if (!usage) return;
+
+  const quotaId = usage.quota_id?.toLowerCase() || "";
+  const isPerDay = quotaId.includes("day");
+  const isPerMinute = quotaId.includes("minute");
+
+  // O contador de "solicitações" só zera quando o servidor reinicia — nunca
+  // sozinho. Isso é comparável a um limite por dia (dá pra ler como "X de Y
+  // hoje"), mas não a um limite por minuto: nesse caso o contador continua
+  // subindo bem depois da janela de 1 minuto ter sido renovada pelo Google,
+  // então mostrar "usado/limite" ali seria enganoso.
+  el.modelUsageLabel.textContent = isPerDay
+    ? `Solicitações hoje · ${usage.label}`
+    : `Solicitações · ${usage.label}`;
+  if (usage.quota_limit && isPerDay) {
+    el.modelUsageValue.textContent = `${usage.requests_used.toLocaleString("pt-BR")} / ${usage.quota_limit.toLocaleString("pt-BR")}`;
+  } else if (usage.quota_limit && isPerMinute) {
+    el.modelUsageValue.textContent = `${usage.requests_used.toLocaleString("pt-BR")} (limite: ${usage.quota_limit}/min)`;
+  } else {
+    el.modelUsageValue.textContent = usage.requests_used.toLocaleString("pt-BR");
+  }
+  el.modelUsageStat.classList.remove("hidden");
+  el.modelUsageStat.classList.toggle("token-usage__stat--warning", usage.limit_reached);
+  el.tokenUsageCard.classList.remove("hidden");
+
+  if (usage.limit_reached) {
+    if (isPerDay) {
+      el.modelUsageNote.textContent = "Limite diário de solicitações deste modelo atingido. Troque de modelo ou aguarde o próximo dia.";
+    } else if (isPerMinute) {
+      el.modelUsageNote.textContent = `Limite de ${usage.quota_limit} solicitações por minuto deste modelo atingido agora. Aguarde cerca de 1 minuto ou troque de modelo.`;
+    } else {
+      el.modelUsageNote.textContent = "Limite de solicitações deste modelo atingido. Troque de modelo ou aguarde alguns instantes.";
+    }
+    el.modelUsageNote.classList.remove("hidden");
+    el.modelUsageNote.classList.add("token-usage__note--warning");
+  } else {
+    el.modelUsageNote.classList.add("hidden");
+    el.modelUsageNote.classList.remove("token-usage__note--warning");
+  }
+}
+
+async function loadGlobalTokenUsage() {
+  try {
+    const response = await fetch("/api/token-usage");
+    if (!response.ok) return;
+    const data = await response.json().catch(() => null);
+    if (data && typeof data.global_tokens_spent === "number") {
+      updateGlobalTokenUsageIndicator(data.global_tokens_spent);
+    }
+  } catch {
+    // Sem conexão ou servidor indisponível: mantém o indicador oculto.
+  }
+}
+
+function updateGlobalTokenUsageIndicator(globalTokensSpent) {
+  el.tokenUsageGlobalValue.textContent = globalTokensSpent.toLocaleString("pt-BR");
+  el.tokenUsageGlobal.classList.remove("hidden");
+  el.tokenUsageCard.classList.remove("hidden");
 }
 
 /* Modos e categorias */
@@ -105,7 +246,6 @@ function startNewConversation() {
   persistConversationId();
   state.latestAnswer = "";
   el.responseCard.classList.add("hidden");
-  el.responseUsage.classList.add("hidden");
   el.promptInput.value = "";
   updateCharacterCount();
   el.promptInput.focus();
@@ -130,15 +270,33 @@ function formatCompactNumber(value) {
   return `${(value / 1000).toFixed(1).replace(".0", "").replace(".", ",")}k`;
 }
 
-function updateResponseUsage(entry) {
+function updateTokenUsageCard(entry) {
   if (typeof entry.tokens_spent !== "number" || typeof entry.tokens_available !== "number") {
-    el.responseUsage.classList.add("hidden");
-    el.responseUsage.textContent = "";
     return;
   }
-  el.responseUsage.textContent =
-    `Tokens disponíveis: ${entry.tokens_available.toLocaleString("pt-BR")} · Tokens gastos: ${entry.tokens_spent.toLocaleString("pt-BR")}`;
-  el.responseUsage.classList.remove("hidden");
+  const limit = entry.tokens_spent + entry.tokens_available;
+  const percentUsedExact = limit > 0 ? Math.min(100, (entry.tokens_spent / limit) * 100) : 0;
+  const percentUsedRounded = Math.round(percentUsedExact);
+  const nearLimit = percentUsedRounded >= 80;
+
+  el.tokenUsageSpent.textContent = entry.tokens_spent.toLocaleString("pt-BR");
+  el.tokenUsageAvailable.textContent = entry.tokens_available.toLocaleString("pt-BR");
+  el.tokenUsageBarFill.style.width = `${percentUsedRounded}%`;
+  el.tokenUsageBarFill.classList.toggle("token-usage__bar-fill--warning", nearLimit);
+  el.tokenUsageBar.setAttribute("aria-valuenow", String(percentUsedRounded));
+  const percentLabel = formatPercent(percentUsedExact);
+  el.tokenUsageNote.textContent = nearLimit
+    ? `${percentLabel} do limite de contexto já foi usado. Considere iniciar uma nova conversa.`
+    : `${percentLabel} do limite de contexto usado até agora.`;
+  el.tokenUsageNote.classList.toggle("token-usage__note--warning", nearLimit);
+  el.tokenUsageCard.classList.remove("hidden");
+}
+
+function formatPercent(value) {
+  if (value <= 0) return "0%";
+  if (value < 0.01) return "<0,01%";
+  if (value < 1) return `${value.toFixed(2).replace(".", ",")}%`;
+  return `${Math.round(value)}%`;
 }
 
 function setupChips() {
@@ -157,7 +315,6 @@ function setupChips() {
       state.selectedCategory = chip.dataset.category;
       // Um resultado ou erro anterior pertence à tarefa que o gerou, não à nova seleção.
       el.responseCard.classList.add("hidden");
-      el.responseUsage.classList.add("hidden");
       hideError();
       applyCategoryPresentation(chip);
     });
@@ -437,6 +594,7 @@ async function handleSubmit() {
     const requestBody = {
       prompt: augmentedPrompt,
       category,
+      model: state.selectedModel,
       source_language: sourceLanguage,
       target_language: targetLanguage,
       mode: state.mode,
@@ -467,6 +625,10 @@ async function handleSubmit() {
       conversation_id: state.mode === "conversation" ? state.currentConversationId : null,
     });
     if (!entry) throw new Error("A resposta recebida está incompleta.");
+    updateTokenUsageCard(entry);
+    if (typeof data.global_tokens_spent === "number") {
+      updateGlobalTokenUsageIndicator(data.global_tokens_spent);
+    }
     if (entry.category !== state.selectedCategory) {
       // O usuário trocou de tarefa enquanto a resposta ainda carregava: só o histórico recebe o resultado.
       addHistoryEntry(entry);
@@ -483,6 +645,7 @@ async function handleSubmit() {
     showError(message || "Não foi possível concluir a solicitação.", { code: error.code });
   } finally {
     setLoading(false);
+    loadModelUsage();
   }
 }
 
@@ -498,6 +661,7 @@ function setLoading(isLoading) {
   el.newConversationBtn.disabled = isLoading;
   el.chips.querySelectorAll(".chip").forEach((chip) => { chip.disabled = isLoading; });
   el.modeOptions.forEach((option) => { option.disabled = isLoading; });
+  el.modelOptions.forEach((option) => { option.disabled = isLoading; });
   el.submitBtn.innerHTML = isLoading
     ? '<span class="material-symbols-outlined spin">progress_activity</span> Gerando resposta...'
     : `<span class="material-symbols-outlined">send</span> ${state.submitLabel || "Gerar resposta"}`;
@@ -564,11 +728,19 @@ function renderMarkdown(container, html, fallbackText) {
   }
 }
 
+function appendTokenConsumptionNote(container, entry) {
+  if (typeof entry.tokens_spent !== "number") return;
+  const note = document.createElement("p");
+  note.className = "token-consumption-note";
+  note.textContent = `[Tokens Consumidos: ${entry.tokens_spent.toLocaleString("pt-BR")}]`;
+  container.appendChild(note);
+}
+
 function showResponse(entry) {
   el.responseCard.style.setProperty("--response-color", categoryColor(entry.category));
   el.responseTitle.textContent = `${entry.mode === "conversation" ? "Conversa" : "Resposta"} — ${entry.category_label}`;
   renderMarkdown(el.responseBody, entry.answer_html, entry.answer);
-  updateResponseUsage(entry);
+  appendTokenConsumptionNote(el.responseBody, entry);
   el.responseCard.classList.remove("hidden");
   el.responseCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
@@ -638,7 +810,9 @@ function buildHistoryNode(entry) {
   node.querySelector(".history-item__mode").textContent = entry.mode === "conversation" ? "Conversa" : "Rápida";
   node.querySelector(".history-item__time").textContent = formatTimestamp(entry.timestamp);
   node.querySelector(".history-item__prompt").textContent = entry.prompt;
-  renderMarkdown(node.querySelector(".history-item__answer"), entry.answer_html, entry.answer);
+  const answerContainer = node.querySelector(".history-item__answer");
+  renderMarkdown(answerContainer, entry.answer_html, entry.answer);
+  appendTokenConsumptionNote(answerContainer, entry);
   node.querySelector(".history-item__delete").addEventListener("click", () => deleteHistoryEntry(entry.id));
   return node;
 }

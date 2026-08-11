@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from functools import lru_cache
 import logging
+import re
 
 from google import genai
 from google.genai import types
@@ -93,6 +94,11 @@ CONVERSATION_INSTRUCTION = (
     "No modo de conversa, considere as mensagens anteriores fornecidas e mantenha "
     "continuidade. Não afirme lembrar de informações que não estejam no contexto."
 )
+LANGUAGE_MATCH_INSTRUCTION = (
+    "Responda sempre no mesmo idioma da mensagem mais recente do usuário, "
+    "independentemente do idioma destas instruções, a menos que o usuário peça "
+    "explicitamente uma resposta em outro idioma."
+)
 
 
 @dataclass(frozen=True)
@@ -108,11 +114,24 @@ class GenerationResult:
 class GeminiServiceError(Exception):
     """Falha da integração com uma mensagem segura para o usuário."""
 
-    def __init__(self, message: str, *, code: str = "ai_error", status_code: int = 502):
+    def __init__(
+        self,
+        message: str,
+        *,
+        code: str = "ai_error",
+        status_code: int = 502,
+        quota_id: str | None = None,
+        quota_limit: int | None = None,
+    ):
         super().__init__(message)
         self.public_message = message
         self.code = code
         self.status_code = status_code
+        # Preenchidos apenas quando a própria API do Gemini informa, no corpo
+        # do erro 429, qual cota foi excedida e o valor exato dela (ex: 20
+        # solicitações/dia). Não é algo que possamos consultar antecipadamente.
+        self.quota_id = quota_id
+        self.quota_limit = quota_limit
 
 
 @lru_cache(maxsize=1)
@@ -133,14 +152,32 @@ def _to_content(message: dict[str, str]) -> types.Content:
     )
 
 
+_QUOTA_VIOLATION_PATTERN = re.compile(
+    r"'quotaId':\s*'([^']+)'.*?'quotaValue':\s*'(\d+)'", re.DOTALL
+)
+
+
+def _parse_quota_violation(raw_details: str) -> tuple[str, int] | None:
+    """Extrai qual cota estourou e o valor exato dela do corpo do erro 429 da API."""
+    match = _QUOTA_VIOLATION_PATTERN.search(raw_details)
+    if not match:
+        return None
+    quota_id, quota_value = match.groups()
+    return quota_id, int(quota_value)
+
+
 def _classify_api_error(exc: Exception) -> GeminiServiceError:
-    details = f"{type(exc).__name__}: {exc}".lower()
+    raw_details = f"{type(exc).__name__}: {exc}"
+    details = raw_details.lower()
 
     if any(term in details for term in ("429", "quota", "resourceexhausted", "rate limit")):
+        quota_violation = _parse_quota_violation(raw_details)
         return GeminiServiceError(
             "O limite temporário do serviço de IA foi atingido. Tente novamente em alguns instantes.",
             code="ai_quota_exceeded",
             status_code=503,
+            quota_id=quota_violation[0] if quota_violation else None,
+            quota_limit=quota_violation[1] if quota_violation else None,
         )
     if any(term in details for term in ("401", "403", "api key", "permissiondenied", "unauthenticated")):
         return GeminiServiceError(
@@ -167,11 +204,14 @@ def generate_response(
     context: list[dict[str, str]] | None = None,
     target_language: str | None = None,
     source_language: str | None = None,
+    model: str = Config.GEMINI_MODEL,
 ) -> GenerationResult:
     """Gera uma resposta sem persistir prompt, resposta ou contexto no servidor."""
     metadata = CATEGORIES.get(category)
     if metadata is None:
         raise GeminiServiceError("A categoria informada é inválida.", code="invalid_category", status_code=400)
+    if model not in Config.ALLOWED_GEMINI_MODELS:
+        raise GeminiServiceError("O modelo de IA informado é inválido.", code="invalid_model", status_code=400)
 
     context = context or []
     system_instruction = metadata["instruction"]
@@ -187,6 +227,8 @@ def generate_response(
             f"O idioma de destino obrigatório é {target_language}. "
             "Entregue somente a tradução, salvo se o usuário pedir explicações."
         )
+    else:
+        system_instruction = f"{system_instruction}\n\n{LANGUAGE_MATCH_INSTRUCTION}"
 
     contents: str | list[types.Content]
     if context:
@@ -198,7 +240,7 @@ def generate_response(
 
     try:
         response = _get_client().models.generate_content(
-            model=Config.GEMINI_MODEL,
+            model=model,
             contents=contents,
             config=types.GenerateContentConfig(
                 system_instruction=system_instruction,
