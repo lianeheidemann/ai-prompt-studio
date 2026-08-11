@@ -78,6 +78,8 @@ A lightweight web workspace for AI-assisted tasks with Google Gemini. Features s
    GEMINI_MODEL=gemini-3.5-flash
    ```
 
+   > **Gemini API usage limits:** Quotas and rate limits vary by model and usage tier. Refer to the [official Gemini API rate limits documentation](https://ai.google.dev/gemini-api/docs/rate-limits) for the current request and token limits before selecting or changing `GEMINI_MODEL`.
+
 3. **Run**
 
    ```bash
