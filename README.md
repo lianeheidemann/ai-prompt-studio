@@ -166,7 +166,7 @@ Settings via environment variables in `config.py`:
 
 #### Mobile
 
-<img width="40%" alt="" src="./assets/interface/demonstration-mobile-v3.gif?v=3">
+<img width="30%" alt="" src="./assets/interface/demonstration-mobile-v3.gif?v=3">
 
 ---
 
