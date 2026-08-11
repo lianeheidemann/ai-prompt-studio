@@ -162,11 +162,11 @@ Settings via environment variables in `config.py`:
 
 #### Desktop 
 
-<img width="80%" alt="" src="./assets/interface/demonstration-desktop-v2.gif?v=3">
+<img width="80%" alt="" src="./assets/interface/demonstration-desktop-v3.gif">
 
 #### Mobile
 
-<img width="40%" alt="" src="./assets/interface/demonstration-mobile-v2.gif?v=3">
+<img width="40%" alt="" src="./assets/interface/demonstration-mobile-v3.gif">
 
 ---
 
