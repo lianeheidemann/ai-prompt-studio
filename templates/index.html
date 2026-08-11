@@ -20,15 +20,25 @@
   <header class="topbar">
     <div class="topbar__inner">
       <div class="topbar__brand">
-      <img class="topbar__logo" src="{{ url_for('assets', filename='icon/logo.png') }}" alt="Logo do AI Prompt Studio">
+      <img class="topbar__logo" src="{{ url_for('assets', filename='icon/logo-robo-giro-horizontal-3d.svg') }}" alt="Logo do AI Prompt Studio">
       <div>
         <h1 class="topbar__title">AI Prompt Studio</h1>
         <p class="topbar__subtitle">Crie, refine e converse com inteligência artificial</p>
       </div>
       </div>
-      <div class="topbar__badge">
-      <span class="material-symbols-outlined">auto_awesome</span>
-        Gemini
+      <div class="model-selector" id="model-selector" role="radiogroup" aria-label="Modelo de IA">
+        {% for key, label in models.items() %}
+        <button
+          type="button"
+          class="model-option{% if key == default_model %} model-option--active{% endif %}"
+          data-model="{{ key }}"
+          role="radio"
+          aria-checked="{{ 'true' if key == default_model else 'false' }}"
+        >
+          <span class="material-symbols-outlined">auto_awesome</span>
+          {{ label }}
+        </button>
+        {% endfor %}
       </div>
     </div>
   </header>
@@ -284,6 +294,15 @@
           <div id="token-usage-bar-fill" class="token-usage__bar-fill"></div>
         </div>
         <p id="token-usage-note" class="token-usage__note"></p>
+        <div id="model-usage-stat" class="token-usage__stat hidden">
+          <span class="token-usage__stat-label" id="model-usage-label">Solicitações hoje</span>
+          <strong id="model-usage-value" class="token-usage__stat-value">—</strong>
+        </div>
+        <p id="model-usage-note" class="token-usage__note hidden"></p>
+        <p id="token-usage-global" class="token-usage__global hidden">
+          <span class="material-symbols-outlined" aria-hidden="true">public</span>
+          <span id="token-usage-global-value">—</span> tokens consumidos por todos os usuários desde que o servidor foi iniciado
+        </p>
       </section>
 
       <aside class="history" id="history-panel" aria-label="Suas conversas recentes">

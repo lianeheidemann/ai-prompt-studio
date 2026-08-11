@@ -13,6 +13,14 @@ class Config:
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
 
+    # Modelos que o usuário pode escolher na interface. A chave é o nome do
+    # modelo enviado à API do Gemini; o valor é o rótulo exibido na aba de
+    # seleção. GEMINI_MODEL acima é o selecionado por padrão ao abrir a página.
+    ALLOWED_GEMINI_MODELS: dict[str, str] = {
+        "gemini-3.5-flash": "Gemini 3.5 Flash",
+        "gemini-flash-lite-latest": "Gemini Flash Lite",
+    }
+
     DEBUG: bool = os.getenv("FLASK_DEBUG", "False").lower() == "true"
 
     # Limites de entrada e de contexto enviados ao modelo.

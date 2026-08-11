@@ -31,6 +31,56 @@ ALLOWED_MARKDOWN_TAGS = {
 _rate_limit_entries: dict[str, deque[float]] = defaultdict(deque)
 _rate_limit_lock = Lock()
 
+# Contador de tokens consumidos por todos os usuários desde que o processo
+# subiu. Em memória (zera ao reiniciar o servidor) e não persiste entre
+# múltiplas instâncias/workers — suficiente para dar uma noção de uso
+# agregado, não é um mecanismo de cota ou faturamento.
+_global_tokens_lock = Lock()
+_global_tokens_spent = 0
+
+
+def _add_global_tokens(amount: int) -> int:
+    global _global_tokens_spent
+    with _global_tokens_lock:
+        _global_tokens_spent += amount
+        return _global_tokens_spent
+
+
+# Uso por modelo desde que o processo subiu: quantas solicitações tiveram
+# sucesso e, quando a própria API já avisou (erro 429), qual é a cota real
+# excedida. Assim como o contador de tokens acima, é em memória e global a
+# todos os usuários — a cota do Gemini é por projeto/chave, não por pessoa.
+_model_stats_lock = Lock()
+_model_stats: dict[str, dict] = {
+    model_id: {"requests_used": 0, "quota_id": None, "quota_limit": None, "limit_reached": False}
+    for model_id in Config.ALLOWED_GEMINI_MODELS
+}
+
+
+def _record_model_success(model: str) -> None:
+    with _model_stats_lock:
+        stats = _model_stats[model]
+        stats["requests_used"] += 1
+        stats["limit_reached"] = False
+
+
+def _record_model_quota_hit(model: str, quota_id: str | None, quota_limit: int | None) -> None:
+    if quota_limit is None:
+        return
+    with _model_stats_lock:
+        stats = _model_stats[model]
+        stats["quota_id"] = quota_id
+        stats["quota_limit"] = quota_limit
+        stats["limit_reached"] = True
+
+
+def _model_usage_snapshot() -> list[dict]:
+    with _model_stats_lock:
+        return [
+            {"id": model_id, "label": label, **_model_stats[model_id]}
+            for model_id, label in Config.ALLOWED_GEMINI_MODELS.items()
+        ]
+
 
 def _error(message: str, code: str, status: int, **headers):
     response = jsonify({"error": message, "code": code})
@@ -140,6 +190,8 @@ def index():
         "index.html",
         categories=CATEGORIES,
         default_category=DEFAULT_CATEGORY,
+        models=Config.ALLOWED_GEMINI_MODELS,
+        default_model=Config.GEMINI_MODEL,
         max_prompt_length=app.config["MAX_PROMPT_LENGTH"],
         max_history_items=app.config["MAX_HISTORY_ITEMS"],
         max_context_messages=app.config["MAX_CONTEXT_MESSAGES"],
@@ -189,6 +241,10 @@ def generate():
     if mode not in {"task", "conversation"}:
         return _error("Escolha um modo de uso válido.", "invalid_mode", 400)
 
+    model = data.get("model", Config.GEMINI_MODEL)
+    if model not in Config.ALLOWED_GEMINI_MODELS:
+        return _error("Escolha um modelo de IA válido.", "invalid_model", 400)
+
     context: list[dict[str, str]] = []
     if mode == "conversation":
         context, context_error = _validate_context(data.get("context"))
@@ -219,16 +275,24 @@ def generate():
             context=context,
             source_language=source_language,
             target_language=target_language,
+            model=model,
         )
     except GeminiServiceError as exc:
+        if exc.code == "ai_quota_exceeded":
+            _record_model_quota_hit(model, exc.quota_id, exc.quota_limit)
         return _error(exc.public_message, exc.code, exc.status_code)
     except Exception:
         logger.exception("Erro inesperado ao gerar resposta")
         return _error("Ocorreu um erro inesperado. Tente novamente.", "internal_error", 500)
 
+    _record_model_success(model)
+
     tokens_available = (
         max(int(app.config["GEMINI_MAX_CONTEXT_TOKENS"]) - result.total_tokens, 0)
         if result.total_tokens is not None else None
+    )
+    global_tokens_spent = (
+        _add_global_tokens(result.total_tokens) if result.total_tokens is not None else None
     )
 
     return jsonify({
@@ -244,7 +308,21 @@ def generate():
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "tokens_spent": result.total_tokens,
         "tokens_available": tokens_available,
+        "global_tokens_spent": global_tokens_spent,
+        "model": model,
+        "model_label": Config.ALLOWED_GEMINI_MODELS[model],
     }), 200
+
+
+@app.get("/api/token-usage")
+def token_usage():
+    with _global_tokens_lock:
+        return jsonify({"global_tokens_spent": _global_tokens_spent}), 200
+
+
+@app.get("/api/model-usage")
+def model_usage():
+    return jsonify({"models": _model_usage_snapshot()}), 200
 
 
 @app.errorhandler(413)
