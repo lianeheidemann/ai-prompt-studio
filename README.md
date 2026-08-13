@@ -23,11 +23,19 @@
 
 **Live demo:** [ai-prompt-studio-av25.onrender.com](https://ai-prompt-studio-av25.onrender.com)
 
-
-
 A lightweight web workspace for AI-assisted tasks with Google Gemini. Features six specialized workflows, contextual conversations, and browser-local history.
 
 > **Note:** the UI and all messages are currently Portuguese (pt-BR) only, with no language toggle.
+
+## Interface
+
+#### Desktop 
+
+<img width="80%" alt="" src="./assets/interface/demonstration-desktop-v3.gif?v=3">
+
+#### Mobile
+
+<img width="30%" alt="" src="./assets/interface/demonstration-mobile-v3.gif?v=3">
 
 ## Features
 
@@ -157,16 +165,6 @@ Settings via environment variables in `config.py`:
 - All history persists only in browser `localStorage`
 - Requests are validated and sanitized before processing
 - Rate limiting prevents abuse from single IP addresses
-
-## Interface
-
-#### Desktop 
-
-<img width="80%" alt="" src="./assets/interface/demonstration-desktop-v3.gif?v=3">
-
-#### Mobile
-
-<img width="30%" alt="" src="./assets/interface/demonstration-mobile-v3.gif?v=3">
 
 ---
 
