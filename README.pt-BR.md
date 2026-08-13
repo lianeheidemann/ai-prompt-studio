@@ -27,6 +27,16 @@ Um ambiente web leve para tarefas assistidas por inteligência artificial com o 
 
 > **Observação:** a interface e todas as mensagens estão disponíveis somente em português (pt-BR), sem seletor de idioma.
 
+## Interface
+
+#### Desktop 
+
+<img width="80%" alt="" src="./assets/interface/demonstration-desktop-v3.gif?v=3">
+
+#### Mobile
+
+<img width="30%" alt="" src="./assets/interface/demonstration-mobile-v3.gif?v=3">
+
 ## Funcionalidades
 
 - **6 fluxos de trabalho especializados**: resumir, traduzir, explicar código, gerar código, melhorar prompts e criar ideias
@@ -155,16 +165,6 @@ As configurações são definidas por variáveis de ambiente no arquivo `config.
 - Todo o histórico permanece apenas no `localStorage` do navegador
 - As requisições são validadas e sanitizadas antes do processamento
 - A limitação de requisições ajuda a impedir abusos originados de um único endereço IP
-
-## Interface
-
-#### Desktop 
-
-<img width="80%" alt="" src="./assets/interface/demonstration-desktop-v3.gif?v=3">
-
-#### Mobile
-
-<img width="30%" alt="" src="./assets/interface/demonstration-mobile-v3.gif?v=3">
 
 ---
 
