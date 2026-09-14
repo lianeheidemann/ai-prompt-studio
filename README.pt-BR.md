@@ -6,19 +6,21 @@
     <img alt="Status: in development" src="https://img.shields.io/badge/status-in%20development-6366f1?style=flat-square&amp;logo=git&amp;logoColor=white">
   </h1>
 <div></div>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/Flask-111827?style=for-the-badge&logo=flask&logoColor=white" alt="Flask">
+  <img src="https://img.shields.io/badge/Gemini_API-8B5CF6?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini API">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css&logoColor=white" alt="CSS3">
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=111827" alt="JavaScript">
+</p>
+
   <p>
     <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml/badge.svg"></a>
     <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml"><img alt="Sync README with code changes" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml/badge.svg"></a>
   </p>
 
-  <p>
-    <a href="https://www.python.org/"><img alt="Python" src="https://img.shields.io/badge/Python-0D1117?style=for-the-badge&amp;logo=python&amp;logoColor=3776AB"></a>
-    <a href="https://flask.palletsprojects.com/"><img alt="Flask" src="https://img.shields.io/badge/Flask-0D1117?style=for-the-badge&amp;logo=flask&amp;logoColor=white"></a>
-    <a href="https://ai.google.dev/"><img alt="Gemini API" src="https://img.shields.io/badge/Gemini_API-0D1117?style=for-the-badge&amp;logo=googlegemini&amp;logoColor=8E75B2"></a>
-    <a href="https://developer.mozilla.org/docs/Web/HTML"><img alt="HTML5" src="https://img.shields.io/badge/HTML5-0D1117?style=for-the-badge&amp;logo=html5&amp;logoColor=E34F26"></a>
-    <a href="https://developer.mozilla.org/docs/Web/CSS"><img alt="CSS3" src="https://img.shields.io/badge/CSS3-0D1117?style=for-the-badge&amp;logo=css3&amp;logoColor=1572B6"></a>
-    <a href="https://developer.mozilla.org/docs/Web/JavaScript"><img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-0D1117?style=for-the-badge&amp;logo=javascript&amp;logoColor=F7DF1E"></a>
-  </p>
 </div>
 
 **Demonstração:** [ai-prompt-studio-av25.onrender.com](https://ai-prompt-studio-av25.onrender.com)
