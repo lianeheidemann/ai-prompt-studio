@@ -1,0 +1,49 @@
+<svg width="900" height="220" viewBox="0 0 900 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="24" y1="24" x2="876" y2="196" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#17112F"/>
+      <stop offset="0.55" stop-color="#241754"/>
+      <stop offset="1" stop-color="#34206F"/>
+    </linearGradient>
+    <linearGradient id="border" x1="24" y1="24" x2="876" y2="196" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C7A3FF"/>
+      <stop offset="0.55" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#D8C6FF"/>
+    </linearGradient>
+    <linearGradient id="gear" x1="60" y1="58" x2="160" y2="162" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F5EEFF"/>
+      <stop offset="0.55" stop-color="#D6BCFF"/>
+      <stop offset="1" stop-color="#9B66F6"/>
+    </linearGradient>
+    <linearGradient id="text" x1="270" y1="65" x2="780" y2="152" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#D8C5FF"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect x="24" y="24" width="852" height="172" rx="34" fill="url(#bg)"/>
+  <rect x="25" y="25" width="850" height="170" rx="33" stroke="url(#border)" stroke-width="2"/>
+  <path d="M42 42H360L235 194H42V42Z" fill="#FFFFFF" opacity="0.04"/>
+  <path d="M720 24H876V196H560L720 24Z" fill="#B992FF" opacity="0.05"/>
+
+  <g filter="url(#glow)">
+    <path d="M78 68C65 82 58 96 58 112" stroke="#DCC8FF" stroke-width="8" stroke-linecap="round" opacity="0.78"/>
+    <path d="M186 152C201 137 208 121 208 104" stroke="#A96CFF" stroke-width="8" stroke-linecap="round" opacity="0.72"/>
+  </g>
+
+  <g transform="translate(18 0)">
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0 110 110" to="360 110 110" dur="2.6s" repeatCount="indefinite"/>
+      <polygon points="110.00,68.00 116.79,58.44 123.46,59.77 126.07,71.20 131.00,73.63 141.66,68.75 146.77,73.23 143.32,84.43 146.37,89.00 158.04,90.10 160.23,96.54 151.64,104.52 152.00,110.00 161.56,116.79 160.23,123.46 148.80,126.07 146.37,131.00 151.25,141.66 146.77,146.77 135.57,143.32 131.00,146.37 129.90,158.04 123.46,160.23 115.48,151.64 110.00,152.00 103.21,161.56 96.54,160.23 93.93,148.80 89.00,146.37 78.34,151.25 73.23,146.77 76.68,135.57 73.63,131.00 61.96,129.90 59.77,123.46 68.36,115.48 68.00,110.00 58.44,103.21 59.77,96.54 71.20,93.93 73.63,89.00 68.75,78.34 73.23,73.23 84.43,76.68 89.00,73.63 90.10,61.96 96.54,59.77 104.52,68.36" fill="url(#gear)"/>
+      <circle cx="110" cy="110" r="22" fill="#26164D"/>
+      <circle cx="110" cy="110" r="13" fill="#4B2D87" opacity="0.9"/>
+    </g>
+  </g>
+
+  <line x1="238" y1="62" x2="238" y2="158" stroke="#B39AE5" stroke-opacity="0.35" stroke-width="2"/>
+  <text x="270" y="131" fill="url(#text)" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="70" font-weight="700" letter-spacing="-1">in development</text>
+</svg>
