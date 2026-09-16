@@ -1,22 +1,24 @@
 <div align="center">
   
-<img width="160" alt="AI Prompt Studio animated logo" src="./assets/icon/logo-robo-giro-horizontal-3d.svg?v=2">
+ <img width="160" alt="AI Prompt Studio animated logo" src="./assets/icon/logo-robo-giro-horizontal-3d.svg?v=2">
 
-<h1>
-AI Prompt Studio<br>
-</h1>
+ <h1>AI Prompt Studio<br></h1>
 
+ <img src="assets/github-animated-divider-v3.svg" width="100%" alt="Divisor animado">
 
-<img width="140" src="assets/badge/in-development-animated-v3.svg"><br>
-<img width="450" src="assets/badge/ia-prompt-studio-badges-v5.png"><br>
-<a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml/badge.svg"></a> <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml"><img alt="Sync README with code changes" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml/badge.svg"></a><br>
+ <img width="140" src="assets/badge/in-development-animated-v4.svg"><br>
 
+ <img width="450" src="assets/badge/ia-prompt-studio-badges-v5.png"><br>
+
+ <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml/badge.svg"></a> <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml"><img alt="Sync README with code changes" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml/badge.svg"></a><br>
+
+ <img src="assets/github-animated-divider-v3.svg" width="100%" alt="Divisor animado">
 
 </div>
 
-<p align="center">
-  <img src="assets/github-animated-divider-v3.svg" width="100%" alt="Divisor animado">
-</p>
+
+  
+
 
 **Live demo:** [ai-prompt-studio-av25.onrender.com](https://ai-prompt-studio-av25.onrender.com)
 
