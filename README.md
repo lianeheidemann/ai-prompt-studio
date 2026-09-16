@@ -4,17 +4,13 @@
   <h1>
     AI Prompt Studio<br>
     <img alt="Status: in development" src="https://img.shields.io/badge/status-in%20development-6366f1?style=flat-square&amp;logo=git&amp;logoColor=white">
+  
   </h1>
 <div></div>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Flask-111827?style=for-the-badge&logo=flask&logoColor=white" alt="Flask">
-  <img src="https://img.shields.io/badge/Gemini_API-8B5CF6?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini API">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css&logoColor=white" alt="CSS3">
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=111827" alt="JavaScript">
-</p>
+
+  <img width="500" src="assets/badge/ia-prompt-studio-badges-v1.png">
+
 
   <p>
     <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml/badge.svg"></a>
