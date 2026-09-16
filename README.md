@@ -5,8 +5,7 @@
  <h1>AI Prompt Studio<br></h1>
  
  <img width="140" src="assets/badge/in-development-animated-v3.svg"><br>
-
- <img width="450" src="assets/badge/ia-prompt-studio-badges-v5.png"><br>
+ <img width="450" src="assets/badge/ia-prompt-studio-badges-v5.png">
 
  <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml/badge.svg"></a> <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml"><img alt="Sync README with code changes" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml/badge.svg"></a><br>
 
