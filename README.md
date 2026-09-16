@@ -1,20 +1,14 @@
 <div align="center">
-  <img width="110" alt="AI Prompt Studio animated logo" src="./assets/icon/logo-robo-giro-horizontal-3d.svg?v=2">
-
-  <h1>
-    AI Prompt Studio<br>
-    
-  </h1>
-<div></div>
-
-  <img width="500" src="assets/badge/ia-prompt-studio-badges-v1.png">
-
-  <p>
-    <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml/badge.svg"></a>
-    <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml"><img alt="Sync README with code changes" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml/badge.svg"></a>
-  </p>
   
-  <img width="180" src="assets/badge/in-development-animated-v3.svg"><br>
+<img width="110" alt="AI Prompt Studio animated logo" src="./assets/icon/logo-robo-giro-horizontal-3d.svg?v=2">
+
+<h1>
+AI Prompt Studio<br>
+</h1>
+
+<img width="180" src="assets/badge/in-development-animated-v3.svg"><br>
+<img width="500" src="assets/badge/ia-prompt-studio-badges-v4.png"><br>
+<a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml/badge.svg"></a> <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml"><img alt="Sync README with code changes" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml/badge.svg"></a>
   
 </div>
 
