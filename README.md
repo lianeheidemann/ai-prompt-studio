@@ -3,20 +3,19 @@
 
   <h1>
     AI Prompt Studio<br>
-    <img alt="Status: in development" src="https://img.shields.io/badge/status-in%20development-6366f1?style=flat-square&amp;logo=git&amp;logoColor=white">
-  
+    
   </h1>
 <div></div>
 
-
   <img width="500" src="assets/badge/ia-prompt-studio-badges-v1.png">
-
 
   <p>
     <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/tests.yml/badge.svg"></a>
     <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml"><img alt="Sync README with code changes" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml/badge.svg"></a>
   </p>
-
+  
+  <img width="150" src="assets/badge/in-development-v1.png">
+  
 </div>
 
 **Live demo:** [ai-prompt-studio-av25.onrender.com](https://ai-prompt-studio-av25.onrender.com)
