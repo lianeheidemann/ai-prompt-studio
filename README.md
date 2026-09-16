@@ -14,9 +14,11 @@
     <a href="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml"><img alt="Sync README with code changes" src="https://github.com/lianeheidemann/ai-prompt-studio/actions/workflows/readme-sync.yml/badge.svg"></a>
   </p>
   
-  <img width="150" src="assets/badge/in-development-v1.png">
+  <img width="180" src="assets/badge/in-development-animated-v2.svg"><br>
   
 </div>
+
+---
 
 **Live demo:** [ai-prompt-studio-av25.onrender.com](https://ai-prompt-studio-av25.onrender.com)
 
