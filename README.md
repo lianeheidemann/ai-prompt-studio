@@ -14,7 +14,9 @@ AI Prompt Studio<br>
 
 </div>
 
----
+<p align="center">
+  <img src="assets/github-animated-divider-v2.svg" width="100%" alt="Divisor animado">
+</p>
 
 **Live demo:** [ai-prompt-studio-av25.onrender.com](https://ai-prompt-studio-av25.onrender.com)
 
