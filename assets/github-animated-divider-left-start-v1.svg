@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="100%"
+     height="24"
+     viewBox="0 0 800 24"
+     role="img"
+     aria-label="Animated divider">
+  <defs>
+    <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0798F2"/>
+      <stop offset="48%" stop-color="#5267F5"/>
+      <stop offset="100%" stop-color="#B93CF2"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <style>
+      .divider-line { stroke: #d0d7de; }
+      @media (prefers-color-scheme: dark) {
+        .divider-line { stroke: #30363d; }
+      }
+    </style>
+  </defs>
+
+  <line class="divider-line"
+        x1="12" y1="12" x2="788" y2="12"
+        stroke-width="3"
+        stroke-linecap="round"/>
+
+  <circle cx="12" cy="12" r="5"
+          fill="url(#logoGradient)"
+          filter="url(#softGlow)">
+    <animateTransform attributeName="transform"
+                      type="translate"
+                      values="0 0; 776 0; 0 0"
+                      keyTimes="0; 0.5; 1"
+                      dur="14s"
+                      repeatCount="indefinite"/>
+  </circle>
+</svg>
