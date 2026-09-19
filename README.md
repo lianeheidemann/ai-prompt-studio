@@ -38,12 +38,12 @@ A lightweight web workspace for AI-assisted tasks with Google Gemini. Features s
 
 ## Quick Start
 
-### Prerequisites
+#### Prerequisites
 
 - Python 3.10+
 - Google Gemini API key
 
-### Setup
+#### Setup
 
 1. **Clone and configure**
 
@@ -107,7 +107,7 @@ node --check static/conversationContext.js
 node --test tests/*.mjs
 ```
 
-### Measuring conversation token usage
+#### Measuring conversation token usage
 
 `scripts/measure_conversation_tokens.py` measures real token counts for the
 "Continuous conversation" mode at a few conversation lengths, using
