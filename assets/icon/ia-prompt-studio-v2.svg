@@ -1,0 +1,219 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="47 30 418 452" width="700.477" height="425.516" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">Logo de robô com giro horizontal em 3D</title>
+  <desc id="logoDesc">Robô em formato de balão de conversa com rotação horizontal e olhos animados.</desc>
+  <style>
+    /* Configurações de movimento */
+    .scene {
+      transform-box: view-box;
+      transform-origin: 256px 270px;
+      perspective: 900px;
+    }
+
+    .robot-3d {
+      transform-box: view-box;
+      transform-origin: 256px 270px;
+      transform-style: preserve-3d;
+      animation: horizontalSpin 8s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .front {
+      transform-box: view-box;
+      transform-origin: 256px 270px;
+      backface-visibility: visible;
+      transform: translateZ(22px);
+    }
+
+    .eyes {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: blink 4.8s ease-in-out infinite;
+    }
+
+    @keyframes horizontalSpin {
+      0%, 10% {
+        transform: rotateY(0deg);
+      }
+      46%, 54% {
+        transform: rotateY(180deg);
+      }
+      90%, 100% {
+        transform: rotateY(360deg);
+      }
+    }
+
+    @keyframes blink {
+      0%, 38%, 43%, 48%, 100% {
+        transform: scaleY(1);
+      }
+      40.5%, 45.5% {
+        transform: scaleY(0.08);
+      }
+    }
+
+    /* Tema claro automático */
+    @media (prefers-color-scheme: light) {
+      .stop-blue { stop-color: #168dff; }
+      .stop-indigo { stop-color: #4c5cff; }
+      .stop-purple { stop-color: #b425ff; }
+
+      .stop-edge-light { stop-color: #7387ff; }
+      .stop-edge-mid { stop-color: #3548b8; }
+      .stop-edge-dark { stop-color: #111d69; }
+
+      .eye-fill { fill: #314fc7; }
+      .eye-stroke { stroke: #172c8e; }
+      .mouth-fill { stroke: #314fc7; }
+      .glow-color { flood-color: #526cff; }
+    }
+
+    /* Tema claro manual */
+    svg[data-theme="light"] .stop-blue {
+      stop-color: #168dff;
+    }
+    svg[data-theme="light"] .stop-indigo {
+      stop-color: #4c5cff;
+    }
+    svg[data-theme="light"] .stop-purple {
+      stop-color: #b425ff;
+    }
+    svg[data-theme="light"] .stop-edge-light {
+      stop-color: #7387ff;
+    }
+    svg[data-theme="light"] .stop-edge-mid {
+      stop-color: #3548b8;
+    }
+    svg[data-theme="light"] .stop-edge-dark {
+      stop-color: #111d69;
+    }
+    svg[data-theme="light"] .eye-fill {
+      fill: #314fc7;
+    }
+    svg[data-theme="light"] .eye-stroke {
+      stroke: #172c8e;
+    }
+    svg[data-theme="light"] .mouth-fill {
+      stroke: #314fc7;
+    }
+    svg[data-theme="light"] .glow-color {
+      flood-color: #526cff;
+    }
+
+    /* Tema escuro manual */
+    svg[data-theme="dark"] .stop-blue {
+      stop-color: #31a8ff;
+    }
+    svg[data-theme="dark"] .stop-indigo {
+      stop-color: #7380ff;
+    }
+    svg[data-theme="dark"] .stop-purple {
+      stop-color: #d057ff;
+    }
+    svg[data-theme="dark"] .stop-edge-light {
+      stop-color: #a6b2ff;
+    }
+    svg[data-theme="dark"] .stop-edge-mid {
+      stop-color: #5368dc;
+    }
+    svg[data-theme="dark"] .stop-edge-dark {
+      stop-color: #1c2b7d;
+    }
+    svg[data-theme="dark"] .eye-fill {
+      fill: #8aa0ff;
+    }
+    svg[data-theme="dark"] .eye-stroke {
+      stroke: #4059d7;
+    }
+    svg[data-theme="dark"] .mouth-fill {
+      stroke: #8aa0ff;
+    }
+    svg[data-theme="dark"] .glow-color {
+      flood-color: #8b96ff;
+    }
+
+    /* Acessibilidade */
+    @media (prefers-reduced-motion: reduce) {
+      .robot-3d,
+      .eyes {
+        animation: none;
+      }
+    }
+  </style>
+  <defs>
+    <!-- Gradiente principal com cores de fallback -->
+    <linearGradient id="bodyGradient" x1="75" y1="155" x2="445" y2="390" gradientUnits="userSpaceOnUse">
+      <stop class="stop-blue" offset="0" stop-color="#31a8ff"/>
+      <stop class="stop-indigo" offset="0.5" stop-color="#7380ff"/>
+      <stop class="stop-purple" offset="1" stop-color="#d057ff"/>
+    </linearGradient>
+    <!-- Gradiente de profundidade -->
+    <linearGradient id="edgeGradient" x1="55" y1="100" x2="465" y2="448" gradientUnits="userSpaceOnUse">
+      <stop class="stop-edge-light" offset="0" stop-color="#a6b2ff"/>
+      <stop class="stop-edge-mid" offset="0.48" stop-color="#5368dc"/>
+      <stop class="stop-edge-dark" offset="1" stop-color="#1c2b7d"/>
+    </linearGradient>
+    <!-- Gradiente da antena -->
+    <linearGradient id="antennaGradient" x1="215" y1="36" x2="297" y2="140" gradientUnits="userSpaceOnUse">
+      <stop class="stop-indigo" offset="0" stop-color="#7380ff"/>
+      <stop class="stop-blue" offset="1" stop-color="#31a8ff"/>
+    </linearGradient>
+    <!-- Brilho suave -->
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood class="glow-color" flood-color="#8b96ff" flood-opacity="0.24"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Sombreamento -->
+    <filter id="edgeShade" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" result="soft"/>
+      <feSpecularLighting in="soft" surfaceScale="5" specularConstant="0.55" specularExponent="18" lighting-color="#ffffff" result="shine">
+        <feDistantLight azimuth="225" elevation="42"/>
+      </feSpecularLighting>
+      <feComposite in="shine" in2="SourceAlpha" operator="in" result="shineCut"/>
+      <feBlend in="SourceGraphic" in2="shineCut" mode="screen"/>
+    </filter>
+    <!-- Máscara do balão -->
+    <mask id="bubbleCutout" maskUnits="userSpaceOnUse" x="55" y="112" width="410" height="370">
+      <rect width="512" height="512" fill="black"/>
+      <rect x="62" y="118" width="388" height="292" rx="140" fill="white"/>
+      <path d="M139 353V465a13 13 0 0 0 20 11l123-78Z" fill="white"/>
+      <rect x="112" y="170" width="288" height="190" rx="92" fill="black"/>
+      <path d="M178 335v65l79-51Z" fill="black"/>
+    </mask>
+    <!-- Geometria do robô -->
+    <g id="robotBody">
+      <path d="M238 132V91h36v41Z"/>
+      <circle cx="256" cy="68" r="38"/>
+      <rect x="55" y="112" width="410" height="370" mask="url(#bubbleCutout)"/>
+    </g>
+  </defs>
+  <!-- Cena principal -->
+  <g class="scene">
+    <g class="robot-3d" data-name="Grupo X">
+      <g class="front">
+        <!-- Corpo com gradiente -->
+        <g fill="url(#bodyGradient)" filter="url(#softGlow)">
+          <use href="#robotBody"/>
+        </g>
+        <!-- Rosto -->
+        <g class="face">
+          <!-- Olhos animados -->
+          <g class="eyes">
+            <circle class="eye-fill eye-stroke" cx="183" cy="260" r="25" fill="#8aa0ff" stroke="#4059d7" stroke-width="5"/>
+            <circle class="eye-fill eye-stroke" cx="329" cy="260" r="25" fill="#8aa0ff" stroke="#4059d7" stroke-width="5"/>
+            <circle cx="175" cy="252" r="6" fill="#ffffff" opacity="0.16"/>
+            <circle cx="321" cy="252" r="6" fill="#ffffff" opacity="0.16"/>
+          </g>
+          <!-- Contorno da boca -->
+          <path d="M224 305c18 21 46 21 64 0" fill="none" class="eye-stroke" stroke="#4059d7" stroke-width="17" stroke-linecap="round"/>
+          <!-- Cor interna da boca -->
+          <path d="M224 301c18 21 46 21 64 0" fill="none" class="mouth-fill" stroke="#8aa0ff" stroke-width="11" stroke-linecap="round"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
